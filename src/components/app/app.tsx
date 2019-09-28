@@ -1,10 +1,10 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Input } from '@material-ui/core';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import logo from './logo.svg';
 import './app.scss';
-import Room from './room';
+import Room from './room-template';
 import House from './house';
 
 const App: React.FC = () => {
@@ -21,6 +21,7 @@ const App: React.FC = () => {
                 <h2>House</h2>
                 <House />
                 <h2>Room Palette</h2>
+                <Input></Input>
                 <Box
                     display="flex"
                     justifyContent="flexStart"
