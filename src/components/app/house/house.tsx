@@ -7,17 +7,24 @@ import './house.scss';
 import Room from './room';
 
 interface RoomObject {
+    id: string;
     name: string;
 }
 
+let roomId = 0;
+
 const House: React.FC = () => {
-    const [rooms, setRooms] = useState([{ name: 'Initial Room' }]);
+    const createNewRoom = (name: string) => {
+        return { id: 'room' + roomId++, name: name };
+    };
+
+    const [rooms, setRooms] = useState([createNewRoom('Initial Room')]);
 
     const [{ canDrop, isOver }, drop] = useDrop({
         accept: ItemTypes.ROOM,
         drop: (item: any) => {
             const newRooms = cloneDeep(rooms);
-            if (item) newRooms.push({ name: item.name });
+            if (item) newRooms.push(createNewRoom('Room'));
             setRooms(newRooms);
         },
         collect: monitor => ({
@@ -27,8 +34,14 @@ const House: React.FC = () => {
     });
 
     const addRoom = (item: RoomObject) => {
+        if (!item) return;
         const newRooms = cloneDeep(rooms);
-        if (item) newRooms.push({ name: item.name });
+        newRooms.push(item);
+        setRooms(newRooms);
+    };
+
+    const removeRoom = (item: RoomObject) => {
+        const newRooms = cloneDeep(rooms).filter(room => room.id !== item.id);
         setRooms(newRooms);
     };
 
@@ -44,13 +57,13 @@ const House: React.FC = () => {
                 alignItems="flex-start"
                 spacing={2}
             >
-                {rooms.map((item, index) => (
-                    <Grid key={index} item>
+                {rooms.map(item => (
+                    <Grid key={item.id} item>
                         <Room
                             name={item.name}
                             width={1}
                             height={1}
-                            key={index}
+                            remove={() => removeRoom(item)}
                         ></Room>
                     </Grid>
                 ))}
@@ -58,7 +71,7 @@ const House: React.FC = () => {
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => addRoom({ name: 'Room' })}
+                onClick={() => addRoom(createNewRoom('New Room'))}
             >
                 Add Room
             </Button>

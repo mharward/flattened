@@ -18,9 +18,10 @@ interface RoomObject {
     name: string;
     width: number;
     height: number;
+    remove(): void;
 }
 
-const Room: React.FC<RoomObject> = ({ name, width, height }) => {
+const Room: React.FC<RoomObject> = ({ name, width, height, remove }) => {
     const [people] = useState([
         { name: 'Peter Smith', color: '#446699' },
         { name: 'James Shaw', color: '#884422' },
@@ -34,7 +35,11 @@ const Room: React.FC<RoomObject> = ({ name, width, height }) => {
                         <IconButton size="small" color="primary">
                             <CreateIcon fontSize="small" />
                         </IconButton>
-                        <IconButton size="small" color="secondary">
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            onClick={remove}
+                        >
                             <ClearIcon fontSize="small" />
                         </IconButton>
                     </Grid>
