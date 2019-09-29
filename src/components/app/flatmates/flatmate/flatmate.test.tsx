@@ -11,6 +11,7 @@ it('renders without crashing', () => {
             rooms={[]}
             flatmate={{ id: '1', name: '', color: '' }}
             removeFlatmate={() => {}}
+            updateFlatmateName={() => {}}
             flatmateCount={2}
         />,
         div

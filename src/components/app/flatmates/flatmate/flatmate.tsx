@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Avatar,
     Box,
     IconButton,
+    Input,
     ListItem,
     ListItemAvatar,
     ListItemText,
@@ -10,6 +11,7 @@ import {
 } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import ClearIcon from '@material-ui/icons/Clear';
+import CreateIcon from '@material-ui/icons/Create';
 import './flatmate.scss';
 
 interface FlatmateDetailsProps {
@@ -18,6 +20,7 @@ interface FlatmateDetailsProps {
     area: number;
     rooms: RoomProps[];
     removeFlatmate(flatmateId: string): void;
+    updateFlatmateName(flatmateId: string, newName: string): void;
     flatmateCount: number;
 }
 
@@ -40,6 +43,7 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
     area,
     rooms,
     removeFlatmate,
+    updateFlatmateName,
     flatmateCount,
 }) => {
     const flatmateArea = rooms
@@ -65,6 +69,22 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
         removeFlatmate(flatmate.id);
     };
 
+    const nameChanged = (event: any) => {
+        updateFlatmateName(flatmate.id, event.target.value);
+    };
+
+    const [editMode, setEditMode] = useState(false);
+
+    const toggleEditMode = () => {
+        setEditMode(!editMode);
+    };
+
+    const nameKeyDown = (event: any) => {
+        if (event.keyCode === 13 || event.keyCode === 27) {
+            toggleEditMode();
+        }
+    };
+
     return (
         <ListItem>
             <ListItemAvatar>
@@ -79,7 +99,25 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
             <ListItemText
                 primary={
                     <Box display="flex">
-                        <Typography variant="h5">{flatmate.name}</Typography>
+                        {editMode ? (
+                            <Input
+                                value={flatmate.name}
+                                onChange={nameChanged}
+                                onKeyDown={nameKeyDown}
+                                autoFocus
+                            ></Input>
+                        ) : (
+                            <Typography variant="h5">
+                                {flatmate.name}
+                            </Typography>
+                        )}
+                        <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={toggleEditMode}
+                        >
+                            <CreateIcon fontSize="small" />
+                        </IconButton>
                         <Typography variant="h5">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         </Typography>

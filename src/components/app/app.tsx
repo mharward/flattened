@@ -39,6 +39,28 @@ const App: React.FC = () => {
         };
     };
 
+    const updateFlatmateName = (flatmateId: string, newName: string): void => {
+        const newFlatmates = cloneDeep(flatmates);
+        const flatmate = newFlatmates.find(
+            flatmate => flatmate.id === flatmateId
+        );
+        if (flatmate) {
+            flatmate.name = newName;
+            setFlatmates(newFlatmates);
+        }
+
+        const newRooms = cloneDeep(rooms);
+        newRooms.forEach(room => {
+            const occupant = room.occupants.find(
+                occupant => occupant.id === flatmateId
+            );
+            if (occupant) {
+                occupant.name = newName;
+            }
+        });
+        setRooms(newRooms);
+    };
+
     const removeFlatmate = (flatmateId: string) => {
         const newFlatmates = cloneDeep(flatmates).filter(
             flatmate => flatmate.id !== flatmateId
@@ -101,6 +123,7 @@ const App: React.FC = () => {
                 rooms={rooms}
                 flatmates={flatmates}
                 addFlatmate={addFlatmate}
+                updateFlatmateName={updateFlatmateName}
                 removeFlatmate={removeFlatmate}
             />
         </div>

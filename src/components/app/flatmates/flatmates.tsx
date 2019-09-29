@@ -9,6 +9,7 @@ interface FlatmatesProps {
     flatmates: FlatmateProps[];
     addFlatmate(): void;
     removeFlatmate(flatmateId: string): void;
+    updateFlatmateName(flatmateId: string, newName: string): void;
     rooms: RoomProps[];
 }
 
@@ -36,6 +37,7 @@ const Flatmates: React.FC<FlatmatesProps> = ({
     flatmates,
     addFlatmate,
     removeFlatmate,
+    updateFlatmateName,
     rooms,
 }) => {
     return (
@@ -73,6 +75,7 @@ const Flatmates: React.FC<FlatmatesProps> = ({
                         area={area}
                         rooms={rooms}
                         removeFlatmate={removeFlatmate}
+                        updateFlatmateName={updateFlatmateName}
                         flatmateCount={flatmates.length}
                         key={item.id}
                     ></Flatmate>

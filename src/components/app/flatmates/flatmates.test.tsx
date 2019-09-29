@@ -12,6 +12,7 @@ it('renders without crashing', () => {
             flatmates={[]}
             addFlatmate={() => {}}
             removeFlatmate={() => {}}
+            updateFlatmateName={() => {}}
         />,
         div
     );
