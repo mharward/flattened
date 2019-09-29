@@ -1,30 +1,70 @@
 import React, { useState } from 'react';
-import { Box } from '@material-ui/core';
-import { DndProvider } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import './app.scss';
-import Room from './room-template';
 import House from './house';
 import Rent from './rent';
-import Calculation from './calculation';
+import Flatmates from './flatmates';
+import { cloneDeep } from 'lodash';
+import { Typography } from '@material-ui/core';
 
-let roomId = 0;
-let flatmateId = 0;
+let roomId = 1;
+let flatmateId = 3;
 
 const App: React.FC = () => {
     const [amount, setAmount] = useState(220.0);
 
-    const createFlatmate = (name: string) => {
+    function hashCode(str: string): number {
+        return str
+            .split('')
+            .reduce(
+                (prevHash, currVal) =>
+                    ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
+                0
+            );
+    }
+
+    function stringToHslColor(str: string, s: number, l: number): string {
+        const hash = hashCode(str);
+
+        const h = (hash * 1000) % 360;
+        return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+    }
+
+    const createFlatmate = (newFlatmateId: number) => {
+        const name = 'Flatmate ' + newFlatmateId;
+
         return {
-            id: 'flatmate' + flatmateId++,
+            id: 'flatmate' + newFlatmateId,
             name: name,
-            color: '#446699',
+            color: stringToHslColor(name, 70, 60),
         };
     };
 
-    const [flatmates] = useState([
-        createFlatmate('Peter Smith'),
-        createFlatmate('James Shaw'),
+    const removeFlatmate = (flatmateId: string) => {
+        const newFlatmates = cloneDeep(flatmates).filter(
+            flatmate => flatmate.id !== flatmateId
+        );
+        setFlatmates(newFlatmates);
+
+        const newRooms = cloneDeep(rooms);
+        newRooms.forEach(
+            room =>
+                (room.occupants = room.occupants.filter(
+                    occupant => occupant.id !== flatmateId
+                ))
+        );
+        setRooms(newRooms);
+    };
+
+    const addFlatmate = (): void => {
+        const newFlatmate = createFlatmate(flatmateId++);
+        const newFlatmates: any = cloneDeep(flatmates);
+        newFlatmates.push(newFlatmate);
+        setFlatmates(newFlatmates);
+    };
+
+    const [flatmates, setFlatmates] = useState([
+        createFlatmate(1),
+        createFlatmate(2),
     ]);
 
     const createNewRoom = (name: string) => {
@@ -37,35 +77,30 @@ const App: React.FC = () => {
         };
     };
 
-    const [rooms, setRooms] = useState([createNewRoom('Initial Room')]);
+    const [rooms, setRooms] = useState([createNewRoom('Bedroom')]);
+
+    const area = rooms
+        .map(room => room.height * room.width)
+        .reduce((total, value) => total + value, 0);
 
     return (
         <div className="app">
-            <DndProvider backend={HTML5Backend}>
-                <Rent amount={amount} amountChange={setAmount} />
-                <h2>House</h2>
-                <House
-                    rooms={rooms}
-                    setRooms={setRooms}
-                    createNewRoom={createNewRoom}
-                />
-                <h2>Room Palette</h2>
-
-                <Box
-                    display="flex"
-                    justifyContent="flexStart"
-                    className="palette"
-                >
-                    <Room name="Bathroom" />
-                    <Room name="Shared Room" />
-                    <Room name="Bedroom" />
-                </Box>
-                <Calculation
-                    amount={amount}
-                    rooms={rooms}
-                    flatmates={flatmates}
-                />
-            </DndProvider>
+            <Typography variant="h1">Flattened</Typography>
+            <Rent amount={amount} amountChange={setAmount} />
+            <House
+                area={area}
+                rooms={rooms}
+                setRooms={setRooms}
+                createNewRoom={createNewRoom}
+            />
+            <Flatmates
+                amount={amount}
+                area={area}
+                rooms={rooms}
+                flatmates={flatmates}
+                addFlatmate={addFlatmate}
+                removeFlatmate={removeFlatmate}
+            />
         </div>
     );
 };

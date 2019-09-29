@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import House from './';
+import Flatmate from '.';
 
 it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(
-        <House
+        <Flatmate
+            amount={220.0}
             area={10}
             rooms={[]}
-            setRooms={() => {}}
-            createNewRoom={() => {}}
+            flatmate={{ id: '1', name: '', color: '' }}
+            removeFlatmate={() => {}}
+            flatmateCount={2}
         />,
         div
     );

@@ -1,11 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Calculation from '.';
+import Flatmates from '.';
 
 it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(
-        <Calculation amount={220.0} rooms={[]} flatmates={[]} />,
+        <Flatmates
+            amount={220.0}
+            area={10}
+            rooms={[]}
+            flatmates={[]}
+            addFlatmate={() => {}}
+            removeFlatmate={() => {}}
+        />,
         div
     );
     ReactDOM.unmountComponentAtNode(div);

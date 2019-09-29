@@ -16,17 +16,17 @@ const Rent: React.FC<RentProps> = ({ amount, amountChange }) => {
     return (
         <Grid container justify="flex-start" spacing={3} alignItems="center">
             <Grid item>
-                <Typography variant="h3">Rent</Typography>
+                <Typography variant="h4">Rent</Typography>
             </Grid>
             <Grid item>
                 <Input
                     type="number"
                     value={amount}
                     onChange={onAmountChange}
-                    style={{ fontSize: '3em' }}
+                    style={{ fontSize: '2.5em' }}
                     startAdornment={
                         <InputAdornment position="start">
-                            <Typography variant="h3">$</Typography>
+                            <Typography variant="h4">$</Typography>
                         </InputAdornment>
                     }
                 ></Input>

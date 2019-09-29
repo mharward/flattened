@@ -1,12 +1,11 @@
 import React from 'react';
-import { Button, Grid } from '@material-ui/core';
-import { useDrop } from 'react-dnd';
+import { Button, Grid, Typography } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
-import ItemTypes from '../../../common/item-types';
 import './house.scss';
 import Room from './room';
 
 interface HouseProps {
+    area: number;
     rooms: any[];
     setRooms(rooms: any[]): void;
     createNewRoom(name: string): any;
@@ -17,20 +16,12 @@ interface RoomObject {
     name: string;
 }
 
-const House: React.FC<HouseProps> = ({ rooms, setRooms, createNewRoom }) => {
-    const [{ canDrop, isOver }, drop] = useDrop({
-        accept: ItemTypes.ROOM,
-        drop: (item: any) => {
-            const newRooms = cloneDeep(rooms);
-            if (item) newRooms.push(createNewRoom('Room'));
-            setRooms(newRooms);
-        },
-        collect: monitor => ({
-            isOver: monitor.isOver(),
-            canDrop: monitor.canDrop(),
-        }),
-    });
-
+const House: React.FC<HouseProps> = ({
+    area,
+    rooms,
+    setRooms,
+    createNewRoom,
+}) => {
     const addRoom = (item: RoomObject) => {
         if (!item) return;
         const newRooms = cloneDeep(rooms);
@@ -43,12 +34,33 @@ const House: React.FC<HouseProps> = ({ rooms, setRooms, createNewRoom }) => {
         setRooms(newRooms);
     };
 
-    const isActive = canDrop && isOver;
-
     return (
-        <div ref={drop}>
-            {isActive ? 'Release to drop' : 'Drag a room here'}
+        <Grid container spacing={3}>
+            <Grid item>
+                <Typography variant="h4" component="h2">
+                    Flat Layout
+                </Typography>
+            </Grid>
+            <Grid item>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => addRoom(createNewRoom('New Room'))}
+                >
+                    Add Room
+                </Button>
+            </Grid>
+            <Grid item>
+                <Typography
+                    color="textSecondary"
+                    variant="body2"
+                    style={{ lineHeight: 2.5 }}
+                >
+                    Total area: {area} m <sup>2</sup>
+                </Typography>
+            </Grid>
             <Grid
+                item
                 container
                 direction="row"
                 justify="flex-start"
@@ -67,14 +79,7 @@ const House: React.FC<HouseProps> = ({ rooms, setRooms, createNewRoom }) => {
                     </Grid>
                 ))}
             </Grid>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => addRoom(createNewRoom('New Room'))}
-            >
-                Add Room
-            </Button>
-        </div>
+        </Grid>
     );
 };
 
