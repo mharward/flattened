@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Grid } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
 import { cloneDeep } from 'lodash';
@@ -6,20 +6,18 @@ import ItemTypes from '../../../common/item-types';
 import './house.scss';
 import Room from './room';
 
+interface HouseProps {
+    rooms: any[];
+    setRooms(rooms: any[]): void;
+    createNewRoom(name: string): any;
+}
+
 interface RoomObject {
     id: string;
     name: string;
 }
 
-let roomId = 0;
-
-const House: React.FC = () => {
-    const createNewRoom = (name: string) => {
-        return { id: 'room' + roomId++, name: name };
-    };
-
-    const [rooms, setRooms] = useState([createNewRoom('Initial Room')]);
-
+const House: React.FC<HouseProps> = ({ rooms, setRooms, createNewRoom }) => {
     const [{ canDrop, isOver }, drop] = useDrop({
         accept: ItemTypes.ROOM,
         drop: (item: any) => {
@@ -61,8 +59,9 @@ const House: React.FC = () => {
                     <Grid key={item.id} item>
                         <Room
                             name={item.name}
-                            width={1}
-                            height={1}
+                            width={item.width}
+                            height={item.height}
+                            occupants={item.occupants}
                             remove={() => removeRoom(item)}
                         ></Room>
                     </Grid>

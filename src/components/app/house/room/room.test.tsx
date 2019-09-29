@@ -5,7 +5,13 @@ import Room from '.';
 it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(
-        <Room name="My Room" width={1} height={2} remove={() => {}} />,
+        <Room
+            name="My Room"
+            width={1}
+            height={2}
+            occupants={[]}
+            remove={() => {}}
+        />,
         div
     );
     ReactDOM.unmountComponentAtNode(div);

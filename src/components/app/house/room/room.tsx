@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Avatar,
     CardContent,
@@ -18,15 +18,17 @@ interface RoomObject {
     name: string;
     width: number;
     height: number;
+    occupants: any[];
     remove(): void;
 }
 
-const Room: React.FC<RoomObject> = ({ name, width, height, remove }) => {
-    const [people] = useState([
-        { name: 'Peter Smith', color: '#446699' },
-        { name: 'James Shaw', color: '#884422' },
-    ]);
-
+const Room: React.FC<RoomObject> = ({
+    name,
+    width,
+    height,
+    occupants,
+    remove,
+}) => {
     return (
         <Card>
             <CardHeader
@@ -62,7 +64,7 @@ const Room: React.FC<RoomObject> = ({ name, width, height, remove }) => {
                     alignItems="flex-start"
                     spacing={1}
                 >
-                    {people.map((item, index) => (
+                    {occupants.map((item, index) => (
                         <Grid key={index} item>
                             <Tooltip title={item.name}>
                                 <Avatar
