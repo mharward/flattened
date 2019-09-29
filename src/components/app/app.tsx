@@ -10,7 +10,7 @@ let roomId = 1;
 let flatmateId = 3;
 
 const App: React.FC = () => {
-    const [amount, setAmount] = useState(220.0);
+    const [amount, setAmount] = useState('220');
 
     function hashCode(str: string): number {
         return str
@@ -83,6 +83,8 @@ const App: React.FC = () => {
         .map(room => room.height * room.width)
         .reduce((total, value) => total + value, 0);
 
+    const amountValue = parseFloat(amount) || 0;
+
     return (
         <div className="app">
             <Typography variant="h1">Flattened</Typography>
@@ -94,7 +96,7 @@ const App: React.FC = () => {
                 createNewRoom={createNewRoom}
             />
             <Flatmates
-                amount={amount}
+                amount={amountValue}
                 area={area}
                 rooms={rooms}
                 flatmates={flatmates}

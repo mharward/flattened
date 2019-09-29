@@ -3,14 +3,14 @@ import { Grid, Input, InputAdornment, Typography } from '@material-ui/core';
 import './rent.scss';
 
 interface RentProps {
-    amount: number;
-    amountChange(newValue: number): void;
+    amount: string;
+    amountChange(newValue: string): void;
 }
 
 const Rent: React.FC<RentProps> = ({ amount, amountChange }) => {
     const onAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newAmount = event.target.value;
-        amountChange(parseFloat(newAmount));
+        amountChange(newAmount);
     };
 
     return (
