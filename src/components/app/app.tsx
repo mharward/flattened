@@ -4,7 +4,15 @@ import House from './house';
 import Rent from './rent';
 import Flatmates from './flatmates';
 import { cloneDeep } from 'lodash';
-import { Typography } from '@material-ui/core';
+import {
+    AppBar,
+    Container,
+    CssBaseline,
+    Grid,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
+import HouseIcon from '@material-ui/icons/House';
 
 let roomId = 1;
 let flatmateId = 3;
@@ -82,6 +90,8 @@ const App: React.FC = () => {
         const newFlatmates: any = cloneDeep(flatmates);
         newFlatmates.push(newFlatmate);
         setFlatmates(newFlatmates);
+
+        // TODO: when a flatmate is added, if a room contains all other existing flatmates or is empty, then add flatmate to room
     };
 
     const [flatmates, setFlatmates] = useState([
@@ -108,25 +118,57 @@ const App: React.FC = () => {
     const amountValue = parseFloat(amount) || 0;
 
     return (
-        <div className="app">
-            <Typography variant="h1">Flattened</Typography>
-            <Rent amount={amount} amountChange={setAmount} />
-            <House
-                area={area}
-                rooms={rooms}
-                setRooms={setRooms}
-                createNewRoom={createNewRoom}
-            />
-            <Flatmates
-                amount={amountValue}
-                area={area}
-                rooms={rooms}
-                flatmates={flatmates}
-                addFlatmate={addFlatmate}
-                updateFlatmateName={updateFlatmateName}
-                removeFlatmate={removeFlatmate}
-            />
-        </div>
+        <React.Fragment>
+            <CssBaseline />
+            <AppBar className="app-header">
+                <Container maxWidth="md">
+                    <Toolbar disableGutters>
+                        <HouseIcon
+                            fontSize="large"
+                            style={{ marginRight: '20px' }}
+                        />
+                        <Typography
+                            component="h1"
+                            variant="h5"
+                            color="inherit"
+                            noWrap
+                        >
+                            Flat Cost
+                        </Typography>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+            <main className="app-main">
+                <div className="app-bar-spacer" />
+                <Container className="app-container" maxWidth="md">
+                    <Grid container spacing={8}>
+                        <Grid item>
+                            <Rent amount={amount} amountChange={setAmount} />
+                        </Grid>
+                        <Grid item>
+                            <House
+                                area={area}
+                                rooms={rooms}
+                                setRooms={setRooms}
+                                createNewRoom={createNewRoom}
+                                flatmates={flatmates}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Flatmates
+                                amount={amountValue}
+                                area={area}
+                                rooms={rooms}
+                                flatmates={flatmates}
+                                addFlatmate={addFlatmate}
+                                updateFlatmateName={updateFlatmateName}
+                                removeFlatmate={removeFlatmate}
+                            />
+                        </Grid>
+                    </Grid>
+                </Container>
+            </main>
+        </React.Fragment>
     );
 };
 

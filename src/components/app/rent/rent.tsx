@@ -8,6 +8,9 @@ interface RentProps {
 }
 
 const Rent: React.FC<RentProps> = ({ amount, amountChange }) => {
+    // TODO: support multiple currencies, presetting based on location, default to $
+    // TODO: set default rent based on the average for a country
+
     const onAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newAmount = event.target.value;
         amountChange(newAmount);

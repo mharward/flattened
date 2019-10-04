@@ -1,28 +1,19 @@
 @import '../../styles/colors';
 
-.app {
-    text-align: center;
-}
-
-.app-logo {
-    height: 40vmin;
-}
-
 .app-header {
-    background-color: $blue-1;
-    min-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: $white;
+    background: linear-gradient(60deg, #a12020, #8e24aa);
 }
 
-.app-link {
-    color: $link-main;
+.app-main {
+    background: linear-gradient(60deg, #DDD, #EEE);
+    min-height: 100vh;
 }
 
-.palette {
-    padding: 20px;
+.app-container {
+    background-color: $white;
+    min-height: 100vh;
+}
+
+.app-bar-spacer {
+    min-height: 80px;
 }

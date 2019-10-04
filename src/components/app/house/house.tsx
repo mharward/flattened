@@ -9,11 +9,15 @@ interface HouseProps {
     rooms: any[];
     setRooms(rooms: any[]): void;
     createNewRoom(name: string): any;
+    flatmates: any[];
 }
 
 interface RoomObject {
     id: string;
     name: string;
+    width: number;
+    height: number;
+    occupants: any[];
 }
 
 const House: React.FC<HouseProps> = ({
@@ -21,11 +25,20 @@ const House: React.FC<HouseProps> = ({
     rooms,
     setRooms,
     createNewRoom,
+    flatmates,
 }) => {
     const addRoom = (item: RoomObject) => {
         if (!item) return;
         const newRooms = cloneDeep(rooms);
         newRooms.push(item);
+        setRooms(newRooms);
+    };
+
+    const updateRoom = (item: RoomObject) => {
+        if (!item) return;
+        const newRooms = cloneDeep(rooms);
+        const index = newRooms.findIndex(room => room.id === item.id);
+        newRooms[index] = item;
         setRooms(newRooms);
     };
 
@@ -70,11 +83,10 @@ const House: React.FC<HouseProps> = ({
                 {rooms.map(item => (
                     <Grid key={item.id} item>
                         <Room
-                            name={item.name}
-                            width={item.width}
-                            height={item.height}
-                            occupants={item.occupants}
+                            room={item}
+                            updateRoom={updateRoom}
                             remove={() => removeRoom(item)}
+                            flatmates={flatmates}
                         ></Room>
                     </Grid>
                 ))}

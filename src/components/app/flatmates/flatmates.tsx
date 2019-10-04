@@ -40,6 +40,9 @@ const Flatmates: React.FC<FlatmatesProps> = ({
     updateFlatmateName,
     rooms,
 }) => {
+    // TODO: sort flatmates by name descending, name ascending, amount descending, amount ascending
+    // TODO: show area of dedicated space and area of of shared space
+
     return (
         <Grid>
             <Grid container spacing={3}>

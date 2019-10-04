@@ -10,7 +10,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
-import ClearIcon from '@material-ui/icons/Clear';
+import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import './flatmate.scss';
 
@@ -85,6 +85,10 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
         }
     };
 
+    const nameBlur = () => {
+        setEditMode(false);
+    };
+
     return (
         <ListItem>
             <ListItemAvatar>
@@ -104,6 +108,7 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                                 value={flatmate.name}
                                 onChange={nameChanged}
                                 onKeyDown={nameKeyDown}
+                                onBlur={nameBlur}
                                 autoFocus
                             ></Input>
                         ) : (
@@ -130,7 +135,7 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
             />
 
             <IconButton color="secondary" onClick={remove}>
-                <ClearIcon />
+                <DeleteIcon />
             </IconButton>
         </ListItem>
     );
