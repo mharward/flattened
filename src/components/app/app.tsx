@@ -12,7 +12,7 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
-import HouseIcon from '@material-ui/icons/House';
+import HeartHouse from './heart-house';
 
 let roomId = 1;
 let flatmateId = 3;
@@ -130,10 +130,7 @@ const App: React.FC = () => {
             <AppBar className="app-header">
                 <Container maxWidth="md">
                     <Toolbar disableGutters>
-                        <HouseIcon
-                            fontSize="large"
-                            style={{ marginRight: '20px' }}
-                        />
+                        <HeartHouse style={{ marginRight: '20px' }} />
                         <Typography
                             component="h1"
                             variant="h5"
