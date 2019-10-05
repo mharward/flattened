@@ -52,15 +52,23 @@ const Room: React.FC<RoomCardObject> = ({
         setEditDialogOpen(false);
     };
 
-    const rawWidth = (room.width * PIXELS_PER_METER);
-    const rawHeight = (room.height * PIXELS_PER_METER);
+    const rawWidth = room.width * PIXELS_PER_METER;
+    const rawHeight = room.height * PIXELS_PER_METER;
 
     const cardWidth = rawWidth > MAX_WIDTH ? MAX_WIDTH : rawWidth;
     const cardHeight = rawHeight > MAX_HEIGHT ? MAX_HEIGHT : rawHeight;
 
     return (
-        <Card style={{ minWidth: cardWidth, minHeight: cardHeight }}>
+        <Card
+            style={{
+                minWidth: cardWidth,
+                minHeight: cardHeight,
+                maxWidth: MAX_WIDTH,
+                maxHeight: MAX_HEIGHT,
+            }}
+        >
             <CardHeader
+                className="room-card-header"
                 action={
                     <Grid container direction="column">
                         <IconButton
@@ -86,7 +94,11 @@ const Room: React.FC<RoomCardObject> = ({
                         />
                     </Grid>
                 }
-                title={room.name}
+                title={
+                    <Typography noWrap variant="h5">
+                        {room.name}
+                    </Typography>
+                }
                 subheader={
                     <Typography color="textSecondary" variant="body2">
                         {room.width}&nbsp;m x {room.height}&nbsp;m&nbsp;&bull;{' '}

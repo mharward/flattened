@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Input, InputAdornment, Typography } from '@material-ui/core';
+import { FormControl, Grid, Input, InputAdornment, Typography } from '@material-ui/core';
 import './rent.scss';
 
 interface RentProps {
@@ -7,9 +7,15 @@ interface RentProps {
     amountChange(newValue: string): void;
 }
 
+const MIN_RENT = 1;
+const MAX_RENT = 1000000;
+
 const Rent: React.FC<RentProps> = ({ amount, amountChange }) => {
+
     // TODO: support multiple currencies, presetting based on location, default to $
     // TODO: set default rent based on the average for a country
+
+    const rentIsInvalid = isNaN(parseFloat(amount)) || parseFloat(amount) < MIN_RENT || parseFloat(amount) > MAX_RENT;
 
     const onAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newAmount = event.target.value;
@@ -22,6 +28,7 @@ const Rent: React.FC<RentProps> = ({ amount, amountChange }) => {
                 <Typography variant="h4">Rent</Typography>
             </Grid>
             <Grid item>
+                <FormControl error={rentIsInvalid}>
                 <Input
                     type="number"
                     value={amount}
@@ -33,6 +40,7 @@ const Rent: React.FC<RentProps> = ({ amount, amountChange }) => {
                         </InputAdornment>
                     }
                 ></Input>
+                </FormControl>
             </Grid>
         </Grid>
     );

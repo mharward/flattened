@@ -20,6 +20,8 @@ interface RoomObject {
     occupants: any[];
 }
 
+const MAX_NUMBER_ROOMS = 20;
+
 const House: React.FC<HouseProps> = ({
     area,
     rooms,
@@ -27,6 +29,8 @@ const House: React.FC<HouseProps> = ({
     createNewRoom,
     flatmates,
 }) => {
+    const maxRoomsReached = rooms.length >= MAX_NUMBER_ROOMS;
+
     const addRoom = (item: RoomObject) => {
         if (!item) return;
         const newRooms = cloneDeep(rooms);
@@ -58,6 +62,7 @@ const House: React.FC<HouseProps> = ({
                 <Button
                     variant="contained"
                     color="primary"
+                    disabled={maxRoomsReached}
                     onClick={() => addRoom(createNewRoom('New Room'))}
                 >
                     Add Room

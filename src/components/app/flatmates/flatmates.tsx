@@ -31,6 +31,8 @@ interface FlatmateSummary {
     value: number;
 }
 
+const MAX_FLATMATES_REACHED = 20;
+
 const Flatmates: React.FC<FlatmatesProps> = ({
     amount,
     area,
@@ -40,6 +42,8 @@ const Flatmates: React.FC<FlatmatesProps> = ({
     updateFlatmateName,
     rooms,
 }) => {
+    const maxFlatmatesReached = flatmates.length >= MAX_FLATMATES_REACHED;
+
     // TODO: sort flatmates by name descending, name ascending, amount descending, amount ascending
     // TODO: show area of dedicated space and area of of shared space
 
@@ -55,6 +59,7 @@ const Flatmates: React.FC<FlatmatesProps> = ({
                     <Button
                         variant="contained"
                         color="primary"
+                        disabled={maxFlatmatesReached}
                         onClick={addFlatmate}
                     >
                         Add Flatmate

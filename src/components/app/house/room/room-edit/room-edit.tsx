@@ -6,6 +6,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    FormControl,
     Input,
     InputLabel,
     List,
@@ -30,6 +31,10 @@ interface RoomObject {
     occupants: any[];
 }
 
+const MAX_NAME_LENGTH = 20;
+const MAX_ROOM_SIZE = 30;
+const MIN_ROOM_SIZE = 1;
+
 const RoomEdit: React.FC<RoomEditObject> = ({
     room,
     updateRoom,
@@ -37,11 +42,16 @@ const RoomEdit: React.FC<RoomEditObject> = ({
     closeDialog,
     flatmates,
 }) => {
+    const nameError =
+        room.name.length === 0 || room.name.length > MAX_NAME_LENGTH;
+
     const nameChange = (event: any) => {
         const newRoom = cloneDeep(room);
         newRoom.name = event.target.value;
         updateRoom(newRoom);
     };
+
+    const widthError = room.width < MIN_ROOM_SIZE || room.width > MAX_ROOM_SIZE;
 
     const widthChange = (event: any) => {
         const newRoom = cloneDeep(room);
@@ -49,54 +59,79 @@ const RoomEdit: React.FC<RoomEditObject> = ({
         updateRoom(newRoom);
     };
 
+    const heightError =
+        room.height < MIN_ROOM_SIZE || room.height > MAX_ROOM_SIZE;
+
     const heightChange = (event: any) => {
         const newRoom = cloneDeep(room);
         newRoom.height = event.target.value;
         updateRoom(newRoom);
     };
 
+    const noOccupants = room.occupants.length === 0 && flatmates.length > 0;
+
+    const dialogHasError: boolean =
+        nameError || widthError || heightError || noOccupants;
+
     return (
-        <Dialog open={editDialogOpen} onClose={closeDialog} fullWidth={true}>
+        <Dialog
+            open={editDialogOpen}
+            onClose={closeDialog}
+            disableBackdropClick={dialogHasError}
+            disableEscapeKeyDown={dialogHasError}
+            fullWidth={true}
+        >
             <DialogTitle>Edit Room</DialogTitle>
             <DialogContent>
-                <InputLabel>Name</InputLabel>
-                <Input
-                    value={room.name}
-                    onChange={nameChange}
-                    fullWidth={true}
-                    autoFocus
-                ></Input>
+                <FormControl error={nameError}>
+                    <InputLabel>Name</InputLabel>
+                    <Input
+                        required={true}
+                        value={room.name}
+                        onChange={nameChange}
+                        fullWidth={true}
+                        autoFocus
+                    ></Input>
+                </FormControl>
                 <Box display="flex" marginBottom="20px" marginTop="20px">
                     <Box marginRight="20px">
-                        <InputLabel>Width (m)</InputLabel>
-                        <Input
-                            type="number"
-                            value={room.width}
-                            onChange={widthChange}
-                        ></Input>
+                        <FormControl error={widthError}>
+                            <InputLabel>Width (m)</InputLabel>
+                            <Input
+                                type="number"
+                                value={room.width}
+                                onChange={widthChange}
+                            ></Input>
+                        </FormControl>
                     </Box>
                     <Box>
-                        <InputLabel>Height (m)</InputLabel>
-                        <Input
-                            type="number"
-                            value={room.height}
-                            onChange={heightChange}
-                        ></Input>
+                        <FormControl error={heightError}>
+                            <InputLabel>Height (m)</InputLabel>
+                            <Input
+                                type="number"
+                                value={room.height}
+                                onChange={heightChange}
+                            ></Input>
+                        </FormControl>
                     </Box>
                 </Box>
-                <InputLabel>Room Occupants</InputLabel>
-                <List>
-                    {flatmates.map(flatmate => (
-                        <OccupantListItem
-                            flatmate={flatmate}
-                            room={room}
-                            updateRoom={updateRoom}
-                        />
-                    ))}
-                </List>
+                <FormControl error={noOccupants}>
+                    <InputLabel shrink={true}>Room Occupants</InputLabel>
+                    <List>
+                        {flatmates.map(flatmate => (
+                            <OccupantListItem
+                                flatmate={flatmate}
+                                room={room}
+                                updateRoom={updateRoom}
+                            />
+                        ))}
+                    </List>
+                </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button onClick={closeDialog}>Close</Button>
+                <Button onClick={closeDialog} disabled={dialogHasError}>
+                    Close
+                </Button>
             </DialogActions>
         </Dialog>
     );
