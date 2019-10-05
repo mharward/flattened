@@ -133,7 +133,7 @@ const App: React.FC = () => {
                             color="inherit"
                             noWrap
                         >
-                            Flat Cost
+                            Cost My Flat
                         </Typography>
                     </Toolbar>
                 </Container>

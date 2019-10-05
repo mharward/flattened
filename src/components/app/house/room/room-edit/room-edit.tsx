@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Box,
     Button,
     Dialog,
     DialogActions,
@@ -65,18 +66,25 @@ const RoomEdit: React.FC<RoomEditObject> = ({
                     fullWidth={true}
                     autoFocus
                 ></Input>
-                <InputLabel>Width</InputLabel>
-                <Input
-                    type="number"
-                    value={room.width}
-                    onChange={widthChange}
-                ></Input>
-                <InputLabel>Height</InputLabel>
-                <Input
-                    type="number"
-                    value={room.height}
-                    onChange={heightChange}
-                ></Input>
+                <Box display="flex" marginBottom="20px" marginTop="20px">
+                    <Box marginRight="20px">
+                        <InputLabel>Width (m)</InputLabel>
+                        <Input
+                            type="number"
+                            value={room.width}
+                            onChange={widthChange}
+                        ></Input>
+                    </Box>
+                    <Box>
+                        <InputLabel>Height (m)</InputLabel>
+                        <Input
+                            type="number"
+                            value={room.height}
+                            onChange={heightChange}
+                        ></Input>
+                    </Box>
+                </Box>
+                <InputLabel>Room Occupants</InputLabel>
                 <List>
                     {flatmates.map(flatmate => (
                         <OccupantListItem

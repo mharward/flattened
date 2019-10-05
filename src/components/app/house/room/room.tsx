@@ -15,6 +15,10 @@ import CreateIcon from '@material-ui/icons/Create';
 import RoomEdit from './room-edit';
 import './room.scss';
 
+const MAX_WIDTH = 350;
+const MAX_HEIGHT = 350;
+const PIXELS_PER_METER = 40;
+
 interface RoomCardObject {
     room: RoomObject;
     updateRoom(updatedRoom: RoomObject): void;
@@ -36,7 +40,6 @@ const Room: React.FC<RoomCardObject> = ({
     remove,
     flatmates,
 }) => {
-    // TODO: resize cards based on room size
     // TODO: allow drag and drop of rooms within house
 
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -49,8 +52,14 @@ const Room: React.FC<RoomCardObject> = ({
         setEditDialogOpen(false);
     };
 
+    const rawWidth = (room.width * PIXELS_PER_METER);
+    const rawHeight = (room.height * PIXELS_PER_METER);
+
+    const cardWidth = rawWidth > MAX_WIDTH ? MAX_WIDTH : rawWidth;
+    const cardHeight = rawHeight > MAX_HEIGHT ? MAX_HEIGHT : rawHeight;
+
     return (
-        <Card>
+        <Card style={{ minWidth: cardWidth, minHeight: cardHeight }}>
             <CardHeader
                 action={
                     <Grid container direction="column">
@@ -80,8 +89,8 @@ const Room: React.FC<RoomCardObject> = ({
                 title={room.name}
                 subheader={
                     <Typography color="textSecondary" variant="body2">
-                        {room.width} m x {room.height} m &bull;{' '}
-                        {room.width * room.height} m<sup>2</sup>
+                        {room.width}&nbsp;m x {room.height}&nbsp;m&nbsp;&bull;{' '}
+                        {room.width * room.height}&nbsp;m<sup>2</sup>
                     </Typography>
                 }
             />

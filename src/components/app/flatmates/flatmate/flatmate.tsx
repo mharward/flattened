@@ -57,10 +57,7 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                 (room.width * room.height) /
                 (room.occupants.length || flatmateCount)
         )
-        .reduce(
-            (total, roomVolumeForOccupant) => total + roomVolumeForOccupant,
-            0
-        );
+        .reduce((total, roomAreaForOccupant) => total + roomAreaForOccupant, 0);
 
     const percentage = area > 0 ? flatmateArea / area : 1 / flatmateCount;
     const value = amount * percentage;
@@ -88,6 +85,34 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
     const nameBlur = () => {
         setEditMode(false);
     };
+
+    const percentageOfRent = (percentage * 100).toFixed(1);
+
+    const dedicatedArea = rooms
+        .filter(
+            room =>
+                (flatmateCount === 1 && room.occupants.length === 0) ||
+                (room.occupants.length === 1 &&
+                    room.occupants.find(
+                        occupant => occupant.id === flatmate.id
+                    ))
+        )
+        .map(room => room.width * room.height)
+        .reduce((total, roomArea) => total + roomArea, 0);
+
+    const sharedArea = rooms
+        .filter(
+            room =>
+                (flatmateCount > 1 && room.occupants.length === 0) ||
+                (room.occupants.length > 1 &&
+                    room.occupants.find(
+                        occupant => occupant.id === flatmate.id
+                    ))
+        )
+        .map(room => room.width * room.height)
+        .reduce((total, roomArea) => total + roomArea, 0);
+
+    const totalArea = dedicatedArea + sharedArea;
 
     return (
         <ListItem>
@@ -131,9 +156,19 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                         </Typography>
                     </Box>
                 }
-                secondary={(percentage * 100).toFixed(1) + '%'}
+                secondary={
+                    <Box display="flex">
+                        <Typography>
+                            {percentageOfRent}%&nbsp;&bull;&nbsp;Dedicated area:{' '}
+                            {dedicatedArea} m<sup>2</sup>
+                            &nbsp;&bull;&nbsp;Shared area: {sharedArea} m
+                            <sup>2</sup>
+                            &nbsp;&bull;&nbsp;Total area: {totalArea} m
+                            <sup>2</sup>
+                        </Typography>
+                    </Box>
+                }
             />
-
             <IconButton color="secondary" onClick={remove}>
                 <DeleteIcon />
             </IconButton>
