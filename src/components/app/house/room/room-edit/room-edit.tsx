@@ -120,6 +120,7 @@ const RoomEdit: React.FC<RoomEditObject> = ({
                     <List>
                         {flatmates.map(flatmate => (
                             <OccupantListItem
+                                key={flatmate.id}
                                 flatmate={flatmate}
                                 room={room}
                                 updateRoom={updateRoom}

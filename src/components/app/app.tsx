@@ -143,7 +143,6 @@ const App: React.FC = () => {
                 </Container>
             </AppBar>
             <main className="app-main">
-                <div className="app-bar-spacer" />
                 <Container className="app-container" maxWidth="md">
                     <Grid container spacing={9} style={{ width: '100%' }}>
                         <Grid item>

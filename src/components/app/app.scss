@@ -12,10 +12,8 @@
 .app-container {
     background-color: $white;
     min-height: 100vh;
-}
-
-.app-bar-spacer {
-    min-height: 80px;
+    padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 .app-footer {

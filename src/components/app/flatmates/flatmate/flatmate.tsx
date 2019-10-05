@@ -171,17 +171,14 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                     </Box>
                 }
                 secondary={
-                    <Box display="flex">
-                        <Typography>
-                            {percentageOfRent}%&nbsp;&bull;
-                            Dedicated&nbsp;area:&nbsp;{dedicatedArea}&nbsp;m
-                            <sup>2</sup>
-                            &nbsp;&bull; Shared&nbsp;area:&nbsp;{sharedArea}
-                            &nbsp;m<sup>2</sup>&nbsp;&bull;
-                            Total&nbsp;area:&nbsp;
-                            {totalArea}&nbsp;m<sup>2</sup>
-                        </Typography>
-                    </Box>
+                    <span>
+                        {percentageOfRent}%&nbsp;&bull;
+                        Dedicated&nbsp;area:&nbsp;{dedicatedArea}&nbsp;m
+                        <sup>2</sup>
+                        &nbsp;&bull; Shared&nbsp;area:&nbsp;{sharedArea}
+                        &nbsp;m<sup>2</sup>&nbsp;&bull; Total&nbsp;area:&nbsp;
+                        {totalArea}&nbsp;m<sup>2</sup>
+                    </span>
                 }
             />
             <IconButton color="secondary" onClick={remove}>
