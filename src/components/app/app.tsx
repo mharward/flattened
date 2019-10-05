@@ -172,6 +172,18 @@ const App: React.FC = () => {
                     </Grid>
                 </Container>
             </main>
+            <footer className="app-footer">
+                <Container className="app-footer-container" maxWidth="md">
+                    <Grid container spacing={9} style={{ width: '100%' }}>
+                        <Grid item>
+                            <Typography>
+                                Made by Matthew Harward &copy; 2019 -{' '}
+                                {new Date().getFullYear()}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Container>
+            </footer>
         </React.Fragment>
     );
 };
