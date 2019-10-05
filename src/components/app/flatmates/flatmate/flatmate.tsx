@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
     Avatar,
     Box,
+    FormControl,
     IconButton,
     Input,
     ListItem,
@@ -36,6 +37,8 @@ interface RoomProps {
     height: number;
     occupants: FlatmateProps[];
 }
+
+const MAX_NAME_LENGHTH = 30;
 
 const Flatmate: React.FC<FlatmateDetailsProps> = ({
     flatmate,
@@ -73,8 +76,14 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
     const [editMode, setEditMode] = useState(false);
 
     const toggleEditMode = () => {
+        if (isNameInvalid) {
+            return;
+        }
         setEditMode(!editMode);
     };
+
+    const isNameInvalid =
+        flatmate.name.length < 1 || flatmate.name.length > MAX_NAME_LENGHTH;
 
     const nameKeyDown = (event: any) => {
         if (event.keyCode === 13 || event.keyCode === 27) {
@@ -83,7 +92,9 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
     };
 
     const nameBlur = () => {
-        setEditMode(false);
+        if (!isNameInvalid) {
+            setEditMode(false);
+        }
     };
 
     const percentageOfRent = (percentage * 100).toFixed(1);
@@ -129,21 +140,24 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                 primary={
                     <Box display="flex">
                         {editMode ? (
-                            <Input
-                                value={flatmate.name}
-                                onChange={nameChanged}
-                                onKeyDown={nameKeyDown}
-                                onBlur={nameBlur}
-                                autoFocus
-                            ></Input>
+                            <FormControl error={isNameInvalid}>
+                                <Input
+                                    value={flatmate.name}
+                                    onChange={nameChanged}
+                                    onKeyDown={nameKeyDown}
+                                    onBlur={nameBlur}
+                                    autoFocus
+                                ></Input>
+                            </FormControl>
                         ) : (
-                            <Typography variant="h5">
+                            <Typography variant="h5" noWrap>
                                 {flatmate.name}
                             </Typography>
                         )}
                         <IconButton
                             size="small"
                             color="primary"
+                            disabled={isNameInvalid}
                             onClick={toggleEditMode}
                         >
                             <CreateIcon fontSize="small" />
@@ -159,12 +173,13 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                 secondary={
                     <Box display="flex">
                         <Typography>
-                            {percentageOfRent}%&nbsp;&bull;&nbsp;Dedicated area:{' '}
-                            {dedicatedArea} m<sup>2</sup>
-                            &nbsp;&bull;&nbsp;Shared area: {sharedArea} m
+                            {percentageOfRent}%&nbsp;&bull;
+                            Dedicated&nbsp;area:&nbsp;{dedicatedArea}&nbsp;m
                             <sup>2</sup>
-                            &nbsp;&bull;&nbsp;Total area: {totalArea} m
-                            <sup>2</sup>
+                            &nbsp;&bull; Shared&nbsp;area:&nbsp;{sharedArea}
+                            &nbsp;m<sup>2</sup>&nbsp;&bull;
+                            Total&nbsp;area:&nbsp;
+                            {totalArea}&nbsp;m<sup>2</sup>
                         </Typography>
                     </Box>
                 }

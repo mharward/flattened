@@ -91,7 +91,14 @@ const App: React.FC = () => {
         newFlatmates.push(newFlatmate);
         setFlatmates(newFlatmates);
 
-        // TODO: when a flatmate is added, if a room contains all other existing flatmates or is empty, then add flatmate to room
+        const newRooms = cloneDeep(rooms);
+        newRooms.forEach(room => {
+            // If room is already shared, e.g. contains all flatmates, then add flatmate to room
+            if (room.occupants.length === newFlatmates.length - 1) {
+                room.occupants.push(newFlatmate);
+            }
+        });
+        setRooms(newRooms);
     };
 
     const [flatmates, setFlatmates] = useState([
@@ -141,7 +148,7 @@ const App: React.FC = () => {
             <main className="app-main">
                 <div className="app-bar-spacer" />
                 <Container className="app-container" maxWidth="md">
-                    <Grid container spacing={8}>
+                    <Grid container spacing={9} style={{ width: '100%' }}>
                         <Grid item>
                             <Rent amount={amount} amountChange={setAmount} />
                         </Grid>
@@ -154,7 +161,7 @@ const App: React.FC = () => {
                                 flatmates={flatmates}
                             />
                         </Grid>
-                        <Grid item>
+                        <Grid item style={{ overflow: 'hidden' }}>
                             <Flatmates
                                 amount={amountValue}
                                 area={area}
