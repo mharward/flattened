@@ -10,6 +10,7 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
+import ReactGA from 'react-ga';
 import { RoomProps, FlatmateProps } from '../../common/entities';
 import { stringToHslColor } from '../../common/utilities';
 import './app.scss';
@@ -17,6 +18,9 @@ import House from './house';
 import Rent from './rent';
 import Flatmates from './flatmates';
 import HeartHouse from './heart-house';
+
+ReactGA.initialize('UA-149483044-1');
+ReactGA.pageview('/');
 
 let roomId = 1;
 let flatmateId = 1;
