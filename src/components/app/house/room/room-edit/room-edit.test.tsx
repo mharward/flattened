@@ -16,6 +16,7 @@ it('renders without crashing', () => {
             updateRoom={() => {}}
             editDialogOpen={true}
             closeDialog={() => {}}
+            flatmates={[]}
         />,
         div
     );

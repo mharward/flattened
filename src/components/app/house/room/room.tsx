@@ -12,6 +12,7 @@ import {
 import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
+import { FlatmateProps, RoomProps } from '../../../../common/entities';
 import RoomEdit from './room-edit';
 import './room.scss';
 
@@ -19,22 +20,14 @@ const MAX_WIDTH = 350;
 const MAX_HEIGHT = 350;
 const PIXELS_PER_METER = 40;
 
-interface RoomCardObject {
-    room: RoomObject;
-    updateRoom(updatedRoom: RoomObject): void;
+interface RoomCardProps {
+    room: RoomProps;
+    updateRoom(updatedRoom: RoomProps): void;
     remove(): void;
-    flatmates: any[];
+    flatmates: FlatmateProps[];
 }
 
-interface RoomObject {
-    id: string;
-    name: string;
-    width: number;
-    height: number;
-    occupants: any[];
-}
-
-const Room: React.FC<RoomCardObject> = ({
+const Room: React.FC<RoomCardProps> = ({
     room,
     updateRoom,
     remove,

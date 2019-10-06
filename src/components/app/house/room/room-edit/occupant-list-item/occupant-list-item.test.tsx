@@ -6,6 +6,11 @@ it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(
         <OccupantListItem
+            flatmate={{
+                id: '',
+                name: '',
+                color: '',
+            }}
             room={{
                 id: '',
                 name: '',
@@ -14,8 +19,6 @@ it('renders without crashing', () => {
                 occupants: [],
             }}
             updateRoom={() => {}}
-            editDialogOpen={true}
-            closeDialog={() => {}}
         />,
         div
     );

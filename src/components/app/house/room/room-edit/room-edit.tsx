@@ -12,30 +12,23 @@ import {
     List,
 } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
+import { FlatmateProps, RoomProps } from '../../../../../common/entities';
 import './room-edit.scss';
 import OccupantListItem from './occupant-list-item';
 
-interface RoomEditObject {
-    room: RoomObject;
-    updateRoom(updatedRoom: RoomObject): void;
+interface RoomEditProps {
+    room: RoomProps;
+    updateRoom(updatedRoom: RoomProps): void;
     editDialogOpen: boolean;
     closeDialog(): void;
-    flatmates: any[];
-}
-
-interface RoomObject {
-    id: string;
-    name: string;
-    width: number;
-    height: number;
-    occupants: any[];
+    flatmates: FlatmateProps[];
 }
 
 const MAX_NAME_LENGTH = 20;
 const MAX_ROOM_SIZE = 30;
 const MIN_ROOM_SIZE = 1;
 
-const RoomEdit: React.FC<RoomEditObject> = ({
+const RoomEdit: React.FC<RoomEditProps> = ({
     room,
     updateRoom,
     editDialogOpen,

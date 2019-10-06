@@ -1,8 +1,4 @@
 import React, { useState } from 'react';
-import './app.scss';
-import House from './house';
-import Rent from './rent';
-import Flatmates from './flatmates';
 import { cloneDeep } from 'lodash';
 import {
     AppBar,
@@ -12,6 +8,11 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
+import { RoomProps, FlatmateProps } from '../../common/entities';
+import './app.scss';
+import House from './house';
+import Rent from './rent';
+import Flatmates from './flatmates';
 import HeartHouse from './heart-house';
 
 let roomId = 1;
@@ -37,7 +38,7 @@ const App: React.FC = () => {
         return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
     }
 
-    const createFlatmate = (newFlatmateId: number) => {
+    const createFlatmate = (newFlatmateId: number): FlatmateProps => {
         const name = 'Flatmate ' + newFlatmateId;
 
         return {
@@ -87,7 +88,7 @@ const App: React.FC = () => {
 
     const addFlatmate = (): void => {
         const newFlatmate = createFlatmate(flatmateId++);
-        const newFlatmates: any = cloneDeep(flatmates);
+        const newFlatmates: FlatmateProps[] = cloneDeep(flatmates);
         newFlatmates.push(newFlatmate);
         setFlatmates(newFlatmates);
 
@@ -101,12 +102,12 @@ const App: React.FC = () => {
         setRooms(newRooms);
     };
 
-    const [flatmates, setFlatmates] = useState([
+    const [flatmates, setFlatmates] = useState<FlatmateProps[]>([
         createFlatmate(1),
         createFlatmate(2),
     ]);
 
-    const createNewRoom = (name: string) => {
+    const createNewRoom = (name: string): RoomProps => {
         return {
             id: 'room' + roomId++,
             name: name,
@@ -116,13 +117,13 @@ const App: React.FC = () => {
         };
     };
 
-    const [rooms, setRooms] = useState([createNewRoom('Bedroom')]);
+    const [rooms, setRooms] = useState<RoomProps[]>([createNewRoom('Bedroom')]);
 
-    const area = rooms
+    const area: number = rooms
         .map(room => room.height * room.width)
         .reduce((total, value) => total + value, 0);
 
-    const amountValue = parseFloat(amount) || 0;
+    const amountValue: number = parseFloat(amount) || 0;
 
     return (
         <React.Fragment>

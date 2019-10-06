@@ -15,6 +15,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
 import './flatmate.scss';
+import { FlatmateProps, RoomProps } from '../../../../common/entities';
 
 interface FlatmateDetailsProps {
     flatmate: FlatmateProps;
@@ -24,19 +25,6 @@ interface FlatmateDetailsProps {
     removeFlatmate(flatmateId: string): void;
     updateFlatmateName(flatmateId: string, newName: string): void;
     flatmateCount: number;
-}
-
-interface FlatmateProps {
-    id: string;
-    name: string;
-    color: string;
-}
-
-interface RoomProps {
-    name: string;
-    width: number;
-    height: number;
-    occupants: FlatmateProps[];
 }
 
 const MAX_NAME_LENGHTH = 30;

@@ -8,20 +8,13 @@ import {
 } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import { cloneDeep } from 'lodash';
+import { FlatmateProps, RoomProps } from '../../../../../../common/entities';
 import './occupant-list-item.scss';
 
 interface OccupantListItemProps {
-    flatmate: any;
-    room: RoomObject;
-    updateRoom(room: RoomObject): void;
-}
-
-interface RoomObject {
-    id: string;
-    name: string;
-    width: number;
-    height: number;
-    occupants: any[];
+    flatmate: FlatmateProps;
+    room: RoomProps;
+    updateRoom(room: RoomProps): void;
 }
 
 const OccupantListItem: React.FC<OccupantListItemProps> = ({

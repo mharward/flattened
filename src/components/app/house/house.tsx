@@ -1,28 +1,17 @@
-import React, { useState } from 'react';
-import {
-    Button,
-    Grid,
-    Typography,
-} from '@material-ui/core';
+import React from 'react';
+import { Button, Grid, Typography } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
+import { FlatmateProps, RoomProps } from '../../../common/entities';
 import './house.scss';
 import Room from './room';
-import Help from '../../../common/help'
+import Help from '../../../common/help';
 
 interface HouseProps {
     area: number;
-    rooms: any[];
-    setRooms(rooms: any[]): void;
-    createNewRoom(name: string): any;
-    flatmates: any[];
-}
-
-interface RoomObject {
-    id: string;
-    name: string;
-    width: number;
-    height: number;
-    occupants: any[];
+    rooms: RoomProps[];
+    setRooms(rooms: RoomProps[]): void;
+    createNewRoom(name: string): RoomProps;
+    flatmates: FlatmateProps[];
 }
 
 const MAX_NUMBER_ROOMS = 20;
@@ -36,14 +25,14 @@ const House: React.FC<HouseProps> = ({
 }) => {
     const maxRoomsReached = rooms.length >= MAX_NUMBER_ROOMS;
 
-    const addRoom = (item: RoomObject) => {
+    const addRoom = (item: RoomProps) => {
         if (!item) return;
         const newRooms = cloneDeep(rooms);
         newRooms.push(item);
         setRooms(newRooms);
     };
 
-    const updateRoom = (item: RoomObject) => {
+    const updateRoom = (item: RoomProps) => {
         if (!item) return;
         const newRooms = cloneDeep(rooms);
         const index = newRooms.findIndex(room => room.id === item.id);
@@ -51,7 +40,7 @@ const House: React.FC<HouseProps> = ({
         setRooms(newRooms);
     };
 
-    const removeRoom = (item: RoomObject) => {
+    const removeRoom = (item: RoomProps) => {
         const newRooms = cloneDeep(rooms).filter(room => room.id !== item.id);
         setRooms(newRooms);
     };
@@ -86,11 +75,9 @@ const House: React.FC<HouseProps> = ({
                 <Grid item>
                     <Help>
                         <Typography variant="h6">Flat Layout</Typography>
-                            This section represents a view of your flat. Add new
-                            rooms to represent spaces within your flat. Edit
-                            them to change their area and to specify who uses
-                            the room.
-
+                        This section represents a view of your flat. Add new
+                        rooms to represent spaces within your flat. Edit them to
+                        change their area and to specify who uses the room.
                     </Help>
                 </Grid>
             </Grid>

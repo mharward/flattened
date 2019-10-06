@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Grid, List, Typography } from '@material-ui/core';
+import { FlatmateProps, RoomProps } from '../../../common/entities';
 import Flatmate from './flatmate';
 import './flatmates.scss';
 
@@ -11,24 +12,6 @@ interface FlatmatesProps {
     removeFlatmate(flatmateId: string): void;
     updateFlatmateName(flatmateId: string, newName: string): void;
     rooms: RoomProps[];
-}
-
-interface FlatmateProps {
-    id: string;
-    name: string;
-    color: string;
-}
-
-interface RoomProps {
-    name: string;
-    width: number;
-    height: number;
-    occupants: FlatmateProps[];
-}
-
-interface FlatmateSummary {
-    percentage: number;
-    value: number;
 }
 
 const MAX_FLATMATES_REACHED = 20;

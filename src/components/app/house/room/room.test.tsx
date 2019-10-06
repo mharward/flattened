@@ -6,11 +6,16 @@ it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(
         <Room
-            name="My Room"
-            width={1}
-            height={2}
-            occupants={[]}
+            room={{
+                id: 'room1',
+                name: 'My Room',
+                width: 1,
+                height: 2,
+                occupants: [],
+            }}
+            updateRoom={() => {}}
             remove={() => {}}
+            flatmates={[]}
         />,
         div
     );
