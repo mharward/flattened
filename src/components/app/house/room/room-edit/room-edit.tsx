@@ -79,7 +79,7 @@ const RoomEdit: React.FC<RoomEditObject> = ({
             onClose={closeDialog}
             disableBackdropClick={dialogHasError}
             disableEscapeKeyDown={dialogHasError}
-            fullWidth={true}
+            fullWidth
         >
             <DialogTitle>Edit Room</DialogTitle>
             <DialogContent>
@@ -130,7 +130,11 @@ const RoomEdit: React.FC<RoomEditObject> = ({
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button onClick={closeDialog} disabled={dialogHasError}>
+                <Button
+                    color="primary"
+                    onClick={closeDialog}
+                    disabled={dialogHasError}
+                >
                     Close
                 </Button>
             </DialogActions>

@@ -144,11 +144,11 @@ const App: React.FC = () => {
             </AppBar>
             <main className="app-main">
                 <Container className="app-container" maxWidth="md">
-                    <Grid container spacing={9} style={{ width: '100%' }}>
-                        <Grid item>
+                    <Grid container spacing={9}>
+                        <Grid item xs={12}>
                             <Rent amount={amount} amountChange={setAmount} />
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={12}>
                             <House
                                 area={area}
                                 rooms={rooms}
@@ -157,7 +157,7 @@ const App: React.FC = () => {
                                 flatmates={flatmates}
                             />
                         </Grid>
-                        <Grid item style={{ overflow: 'hidden' }}>
+                        <Grid item xs={12}>
                             <Flatmates
                                 amount={amountValue}
                                 area={area}
@@ -173,8 +173,8 @@ const App: React.FC = () => {
             </main>
             <footer className="app-footer">
                 <Container className="app-footer-container" maxWidth="md">
-                    <Grid container spacing={9} style={{ width: '100%' }}>
-                        <Grid item>
+                    <Grid container spacing={9}>
+                        <Grid item xs={12}>
                             <Typography>
                                 Made by Matthew Harward &copy; 2019 -{' '}
                                 {new Date().getFullYear()}

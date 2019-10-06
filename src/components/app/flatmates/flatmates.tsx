@@ -45,11 +45,10 @@ const Flatmates: React.FC<FlatmatesProps> = ({
     const maxFlatmatesReached = flatmates.length >= MAX_FLATMATES_REACHED;
 
     // TODO: sort flatmates by name descending, name ascending, amount descending, amount ascending
-    // TODO: show area of dedicated space and area of of shared space
 
     return (
-        <Grid>
-            <Grid container spacing={3}>
+        <Grid container>
+            <Grid item container spacing={2} xs={12}>
                 <Grid item>
                     <Typography variant="h4" component="h2">
                         Flatmates
@@ -75,20 +74,22 @@ const Flatmates: React.FC<FlatmatesProps> = ({
                     </Typography>
                 </Grid>
             </Grid>
-            <List>
-                {flatmates.map(item => (
-                    <Flatmate
-                        flatmate={item}
-                        amount={amount}
-                        area={area}
-                        rooms={rooms}
-                        removeFlatmate={removeFlatmate}
-                        updateFlatmateName={updateFlatmateName}
-                        flatmateCount={flatmates.length}
-                        key={item.id}
-                    ></Flatmate>
-                ))}
-            </List>
+            <Grid item xs={12}>
+                <List>
+                    {flatmates.map(item => (
+                        <Flatmate
+                            flatmate={item}
+                            amount={amount}
+                            area={area}
+                            rooms={rooms}
+                            removeFlatmate={removeFlatmate}
+                            updateFlatmateName={updateFlatmateName}
+                            flatmateCount={flatmates.length}
+                            key={item.id}
+                        ></Flatmate>
+                    ))}
+                </List>
+            </Grid>
         </Grid>
     );
 };

@@ -7,6 +7,7 @@ import {
     Input,
     ListItem,
     ListItemAvatar,
+    ListItemSecondaryAction,
     ListItemText,
     Typography,
 } from '@material-ui/core';
@@ -181,9 +182,16 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                     </span>
                 }
             />
-            <IconButton color="secondary" onClick={remove}>
-                <DeleteIcon />
-            </IconButton>
+            <ListItemSecondaryAction>
+                <IconButton
+                    color="secondary"
+                    onClick={remove}
+                    edge="end"
+                    aria-label="delete"
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </ListItemSecondaryAction>
         </ListItem>
     );
 };

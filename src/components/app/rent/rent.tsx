@@ -1,7 +1,7 @@
 import React from 'react';
 import {
+    Box,
     FormControl,
-    Grid,
     Input,
     InputAdornment,
     Typography,
@@ -31,26 +31,24 @@ const Rent: React.FC<RentProps> = ({ amount, amountChange }) => {
     };
 
     return (
-        <Grid container justify="flex-start" spacing={3} alignItems="center">
-            <Grid item>
-                <Typography variant="h4">Rent</Typography>
-            </Grid>
-            <Grid item>
-                <FormControl error={rentIsInvalid}>
-                    <Input
-                        type="number"
-                        value={amount}
-                        onChange={onAmountChange}
-                        style={{ fontSize: '2.5em' }}
-                        startAdornment={
-                            <InputAdornment position="start">
-                                <Typography variant="h4">$</Typography>
-                            </InputAdornment>
-                        }
-                    ></Input>
-                </FormControl>
-            </Grid>
-        </Grid>
+        <Box display="flex" flexDirection="row">
+            <Typography variant="h4" style={{ marginRight: 20, marginTop: 8 }}>
+                Rent
+            </Typography>
+            <FormControl error={rentIsInvalid}>
+                <Input
+                    type="number"
+                    value={amount}
+                    onChange={onAmountChange}
+                    style={{ fontSize: '2.5em' }}
+                    startAdornment={
+                        <InputAdornment position="start">
+                            <Typography variant="h4">$</Typography>
+                        </InputAdornment>
+                    }
+                ></Input>
+            </FormControl>
+        </Box>
     );
 };
 
