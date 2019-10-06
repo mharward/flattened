@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Grid, List, Typography } from '@material-ui/core';
 import { FlatmateProps, RoomProps } from '../../../common/entities';
+import Help from '../../../common/help';
 import Flatmate from './flatmate';
 
 interface FlatmatesProps {
@@ -54,6 +55,17 @@ const Flatmates: React.FC<FlatmatesProps> = ({
                     >
                         Total flatmates: {flatmates.length}
                     </Typography>
+                </Grid>
+                <Grid item>
+                    <Help>
+                        <Typography variant="h6">Flatmates</Typography>
+                        This section provides a list of the flatmates. Add and
+                        name new flatmates to show who lives in the flat. Each
+                        flatmate has an amount of the rent calculated for them.
+                        This is dynamically updated so will always be up to
+                        date. Additional details about the percentage of the
+                        rent and area they occupy in the flat is also provided.
+                    </Help>
                 </Grid>
             </Grid>
             <Grid item xs={12}>
