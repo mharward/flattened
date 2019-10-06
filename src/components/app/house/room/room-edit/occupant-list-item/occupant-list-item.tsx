@@ -9,7 +9,6 @@ import {
 import PersonIcon from '@material-ui/icons/Person';
 import { cloneDeep } from 'lodash';
 import { FlatmateProps, RoomProps } from '../../../../../../common/entities';
-import './occupant-list-item.scss';
 
 interface OccupantListItemProps {
     flatmate: FlatmateProps;

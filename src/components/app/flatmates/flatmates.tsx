@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Grid, List, Typography } from '@material-ui/core';
 import { FlatmateProps, RoomProps } from '../../../common/entities';
 import Flatmate from './flatmate';
-import './flatmates.scss';
 
 interface FlatmatesProps {
     amount: number;

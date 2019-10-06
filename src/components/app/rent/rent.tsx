@@ -6,7 +6,6 @@ import {
     InputAdornment,
     Typography,
 } from '@material-ui/core';
-import './rent.scss';
 
 interface RentProps {
     amount: string;

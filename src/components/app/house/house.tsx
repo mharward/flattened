@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import { FlatmateProps, RoomProps } from '../../../common/entities';
-import './house.scss';
 import Room from './room';
 import Help from '../../../common/help';
 

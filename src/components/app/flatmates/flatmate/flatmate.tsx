@@ -14,7 +14,6 @@ import {
 import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';
-import './flatmate.scss';
 import { FlatmateProps, RoomProps } from '../../../../common/entities';
 
 interface FlatmateDetailsProps {

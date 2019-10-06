@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 import { cloneDeep } from 'lodash';
 import { FlatmateProps, RoomProps } from '../../../../../common/entities';
-import './room-edit.scss';
 import OccupantListItem from './occupant-list-item';
 
 interface RoomEditProps {
