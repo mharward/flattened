@@ -8,8 +8,10 @@ it('renders without crashing', () => {
         <House
             area={10}
             rooms={[]}
-            setRooms={() => {}}
-            createNewRoom={() => {}}
+            addRoom={() => {}}
+            updateRoom={() => {}}
+            removeRoom={() => {}}
+            flatmates={[]}
         />,
         div
     );

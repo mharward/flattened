@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { cloneDeep } from 'lodash';
 import {
     AppBar,
+    Box,
+    Button,
     Container,
     CssBaseline,
     Grid,
@@ -9,6 +11,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { RoomProps, FlatmateProps } from '../../common/entities';
+import { stringToHslColor } from '../../common/utilities';
 import './app.scss';
 import House from './house';
 import Rent from './rent';
@@ -16,37 +19,121 @@ import Flatmates from './flatmates';
 import HeartHouse from './heart-house';
 
 let roomId = 1;
-let flatmateId = 3;
+let flatmateId = 1;
+
+const createFlatmate = (name?: string): FlatmateProps => {
+    const newFlatmateId = flatmateId++;
+    const defaultName = 'Flatmate ' + newFlatmateId;
+
+    return {
+        id: 'flatmate' + newFlatmateId,
+        name: name || defaultName,
+        color: stringToHslColor(defaultName, 70, 60),
+    };
+};
+
+const createNewRoom = (
+    name?: string,
+    width?: number,
+    height?: number,
+    flatmates?: FlatmateProps[]
+): RoomProps => {
+    const newRoomId = roomId++;
+    return {
+        id: 'room' + newRoomId,
+        name: name || 'Room ' + newRoomId,
+        occupants: flatmates || [],
+        width: width || 3,
+        height: height || 3,
+    };
+};
+
+const defaultFlatmates = [
+    createFlatmate('Jane Flatter'),
+    createFlatmate('Phil Renter'),
+];
+
+const defaultRooms = [
+    createNewRoom('Bedroom', 3, 4, defaultFlatmates),
+    createNewRoom('Living Area', 4, 4, defaultFlatmates),
+    createNewRoom('Bathroom', 3, 2, defaultFlatmates),
+];
+
+const twoBedroomsRooms = [
+    createNewRoom('Master Bedroom', 5, 4, [defaultFlatmates[0]]),
+    createNewRoom('Small Bedroom', 3, 3, [defaultFlatmates[1]]),
+    createNewRoom('Living Area', 4, 4, defaultFlatmates),
+    createNewRoom('Kitchen', 3, 4, defaultFlatmates),
+    createNewRoom('Bathroom', 3, 2, defaultFlatmates),
+];
+
+const threeBedroomsFlatmates = [
+    ...defaultFlatmates,
+    createFlatmate('Eliza Housemate'),
+    createFlatmate('John Tenant'),
+];
+
+const threeBedroomsRooms = [
+    createNewRoom('Master Bedroom', 5, 4, [
+        threeBedroomsFlatmates[0],
+        threeBedroomsFlatmates[1],
+    ]),
+    createNewRoom('Ensuite', 3, 2, [
+        threeBedroomsFlatmates[0],
+        threeBedroomsFlatmates[1],
+    ]),
+    createNewRoom('Bedroom', 4, 4, [threeBedroomsFlatmates[2]]),
+    createNewRoom('Small Bedroom', 3, 3, [threeBedroomsFlatmates[3]]),
+    createNewRoom('Living Area', 5, 4, threeBedroomsFlatmates),
+    createNewRoom('Kitchen', 3, 4, threeBedroomsFlatmates),
+    createNewRoom('Bathroom', 3, 2, threeBedroomsFlatmates),
+];
+
+const manyBedroomsFlatmates = [
+    ...threeBedroomsFlatmates,
+    createFlatmate('Rachel Roommate'),
+    createFlatmate('Paul Tenant'),
+];
+
+const manyBedroomsRooms = [
+    createNewRoom('Master Bedroom', 5, 4, [
+        manyBedroomsFlatmates[0],
+        manyBedroomsFlatmates[1],
+    ]),
+    createNewRoom('Master Ensuite', 3, 2, [
+        manyBedroomsFlatmates[0],
+        manyBedroomsFlatmates[1],
+    ]),
+    createNewRoom('Bedroom', 4, 4, [manyBedroomsFlatmates[2]]),
+    createNewRoom('Small Bedroom', 3, 3, [manyBedroomsFlatmates[4]]),
+    createNewRoom('Living Area', 5, 5, manyBedroomsFlatmates),
+    createNewRoom('Kitchen', 4, 4, manyBedroomsFlatmates),
+    createNewRoom('Bathroom', 3, 2, [
+        manyBedroomsFlatmates[0],
+        manyBedroomsFlatmates[1],
+        manyBedroomsFlatmates[2],
+        manyBedroomsFlatmates[4],
+    ]),
+    createNewRoom('Sleepout Bedroom', 3, 3, [
+        manyBedroomsFlatmates[3],
+        manyBedroomsFlatmates[5],
+    ]),
+    createNewRoom('Sleepout Bathroom', 3, 2, [
+        manyBedroomsFlatmates[3],
+        manyBedroomsFlatmates[5],
+    ]),
+    createNewRoom('Sleepout Living', 3, 3, [
+        manyBedroomsFlatmates[3],
+        manyBedroomsFlatmates[5],
+    ]),
+];
 
 const App: React.FC = () => {
     const [amount, setAmount] = useState('220');
-
-    function hashCode(str: string): number {
-        return str
-            .split('')
-            .reduce(
-                (prevHash, currVal) =>
-                    ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
-                0
-            );
-    }
-
-    function stringToHslColor(str: string, s: number, l: number): string {
-        const hash = hashCode(str);
-
-        const h = (hash * 1000) % 360;
-        return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
-    }
-
-    const createFlatmate = (newFlatmateId: number): FlatmateProps => {
-        const name = 'Flatmate ' + newFlatmateId;
-
-        return {
-            id: 'flatmate' + newFlatmateId,
-            name: name,
-            color: stringToHslColor(name, 70, 60),
-        };
-    };
+    const [flatmates, setFlatmates] = useState<FlatmateProps[]>(
+        defaultFlatmates
+    );
+    const [rooms, setRooms] = useState<RoomProps[]>(defaultRooms);
 
     const updateFlatmateName = (flatmateId: string, newName: string): void => {
         const newFlatmates = cloneDeep(flatmates);
@@ -87,43 +174,95 @@ const App: React.FC = () => {
     };
 
     const addFlatmate = (): void => {
-        const newFlatmate = createFlatmate(flatmateId++);
-        const newFlatmates: FlatmateProps[] = cloneDeep(flatmates);
-        newFlatmates.push(newFlatmate);
+        const newFlatmate = createFlatmate();
+        addFlatmates([newFlatmate], false);
+    };
+
+    const addFlatmates = (
+        flatmatesToAdd: FlatmateProps[],
+        replaceAll?: boolean
+    ) => {
+        const newFlatmates = replaceAll
+            ? flatmatesToAdd
+            : cloneDeep(flatmates).concat(flatmatesToAdd);
         setFlatmates(newFlatmates);
 
         const newRooms = cloneDeep(rooms);
         newRooms.forEach(room => {
-            // If room is already shared, e.g. contains all flatmates, then add flatmate to room
-            if (room.occupants.length === newFlatmates.length - 1) {
-                room.occupants.push(newFlatmate);
+            if (replaceAll) {
+                room.occupants = [];
+            }
+            // If room is already shared, e.g. contains all flatmates, then add flatmates to room
+            if (
+                room.occupants.length ===
+                newFlatmates.length - flatmatesToAdd.length
+            ) {
+                room.occupants = room.occupants.concat(flatmatesToAdd);
             }
         });
+        if (newRooms.length > 0) {
+            setRooms(newRooms);
+        }
+    };
+
+    const addRoom = () => {
+        const newRoom = createNewRoom();
+        newRoom.occupants = cloneDeep(flatmates);
+        addRooms([newRoom], false);
+    };
+
+    const addRooms = (roomsToAdd: RoomProps[], replaceAll?: boolean) => {
+        const newRooms = replaceAll
+            ? roomsToAdd
+            : cloneDeep(rooms).concat(roomsToAdd);
         setRooms(newRooms);
     };
 
-    const [flatmates, setFlatmates] = useState<FlatmateProps[]>([
-        createFlatmate(1),
-        createFlatmate(2),
-    ]);
-
-    const createNewRoom = (name: string): RoomProps => {
-        return {
-            id: 'room' + roomId++,
-            name: name,
-            occupants: flatmates,
-            width: 3,
-            height: 3,
-        };
+    const updateRoom = (item: RoomProps) => {
+        if (!item) return;
+        const newRooms = cloneDeep(rooms);
+        const index = newRooms.findIndex(room => room.id === item.id);
+        newRooms[index] = item;
+        setRooms(newRooms);
     };
 
-    const [rooms, setRooms] = useState<RoomProps[]>([createNewRoom('Bedroom')]);
+    const removeRoom = (item: RoomProps) => {
+        const newRooms = cloneDeep(rooms).filter(room => room.id !== item.id);
+        setRooms(newRooms);
+    };
 
     const area: number = rooms
         .map(room => room.height * room.width)
         .reduce((total, value) => total + value, 0);
 
     const amountValue: number = parseFloat(amount) || 0;
+
+    const updateAllState = (
+        amount: string,
+        flatmates: FlatmateProps[],
+        rooms: RoomProps[]
+    ) => {
+        roomId = rooms.length + 1;
+        flatmateId = flatmates.length + 1;
+        setAmount(amount);
+        addFlatmates(flatmates, true);
+        addRooms(rooms, true);
+    };
+
+    const clearAll = () => {
+        updateAllState('100', [], []);
+    };
+
+    // Examples
+
+    const oneBedroom = () =>
+        updateAllState('220', defaultFlatmates, defaultRooms);
+    const twoBedrooms = () =>
+        updateAllState('350', defaultFlatmates, twoBedroomsRooms);
+    const threeBedrooms = () =>
+        updateAllState('420', threeBedroomsFlatmates, threeBedroomsRooms);
+    const manyBedrooms = () =>
+        updateAllState('540', manyBedroomsFlatmates, manyBedroomsRooms);
 
     return (
         <React.Fragment>
@@ -145,7 +284,15 @@ const App: React.FC = () => {
             </AppBar>
             <main className="app-main">
                 <Container className="app-container" maxWidth="md">
-                    <Grid container spacing={9}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography>
+                                Are you flatting? One challenge for would-be
+                                flatmates is how to split the rent. This
+                                calculator uses a simple model of your flat and
+                                flatmates to figure out an equitable solution.
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12}>
                             <Rent amount={amount} amountChange={setAmount} />
                         </Grid>
@@ -153,8 +300,9 @@ const App: React.FC = () => {
                             <House
                                 area={area}
                                 rooms={rooms}
-                                setRooms={setRooms}
-                                createNewRoom={createNewRoom}
+                                addRoom={addRoom}
+                                updateRoom={updateRoom}
+                                removeRoom={removeRoom}
                                 flatmates={flatmates}
                             />
                         </Grid>
@@ -168,6 +316,78 @@ const App: React.FC = () => {
                                 updateFlatmateName={updateFlatmateName}
                                 removeFlatmate={removeFlatmate}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={clearAll}
+                            >
+                                Clear All
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h4" gutterBottom>
+                                How It Works
+                            </Typography>
+                            <Typography gutterBottom>
+                                For each room, its value is calculated based on
+                                its relative area to the rest of the flat. Then
+                                each occupant is assigned their proportion of
+                                this value. Finally, for each flatmate, the
+                                proportion of values across all of the rooms
+                                they use is then added.
+                            </Typography>
+                            <Typography>
+                                This calculator doesn't account for relative
+                                differences in the value or amount of usage of a
+                                room, outside spaces, or any special
+                                dispensations given to particular flatmates.
+                                However, in the majority of cases this
+                                calculator provides a good model for giving an
+                                equitable cost per flatmate.
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h4">Examples</Typography>
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                padding={3}
+                            >
+                                <Button
+                                    className="example-button"
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={oneBedroom}
+                                >
+                                    1 Bedroom with Couple
+                                </Button>
+                                <Button
+                                    className="example-button"
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={twoBedrooms}
+                                >
+                                    2 Bedrooms of Different Sizes
+                                </Button>
+                                <Button
+                                    className="example-button"
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={threeBedrooms}
+                                >
+                                    3 Bedrooms with Couple
+                                </Button>
+                                <Button
+                                    className="example-button"
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={manyBedrooms}
+                                >
+                                    Large Flat with Many Spaces
+                                </Button>
+                            </Box>
                         </Grid>
                     </Grid>
                 </Container>

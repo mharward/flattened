@@ -1,15 +1,16 @@
 import React from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
-import { cloneDeep } from 'lodash';
 import { FlatmateProps, RoomProps } from '../../../common/entities';
+
 import Room from './room';
 import Help from '../../../common/help';
 
 interface HouseProps {
     area: number;
     rooms: RoomProps[];
-    setRooms(rooms: RoomProps[]): void;
-    createNewRoom(name: string): RoomProps;
+    addRoom(): void;
+    updateRoom(room: RoomProps): void;
+    removeRoom(room: RoomProps): void;
     flatmates: FlatmateProps[];
 }
 
@@ -18,31 +19,12 @@ const MAX_NUMBER_ROOMS = 20;
 const House: React.FC<HouseProps> = ({
     area,
     rooms,
-    setRooms,
-    createNewRoom,
+    addRoom,
+    updateRoom,
+    removeRoom,
     flatmates,
 }) => {
     const maxRoomsReached = rooms.length >= MAX_NUMBER_ROOMS;
-
-    const addRoom = (item: RoomProps) => {
-        if (!item) return;
-        const newRooms = cloneDeep(rooms);
-        newRooms.push(item);
-        setRooms(newRooms);
-    };
-
-    const updateRoom = (item: RoomProps) => {
-        if (!item) return;
-        const newRooms = cloneDeep(rooms);
-        const index = newRooms.findIndex(room => room.id === item.id);
-        newRooms[index] = item;
-        setRooms(newRooms);
-    };
-
-    const removeRoom = (item: RoomProps) => {
-        const newRooms = cloneDeep(rooms).filter(room => room.id !== item.id);
-        setRooms(newRooms);
-    };
 
     return (
         <Grid>
@@ -57,7 +39,7 @@ const House: React.FC<HouseProps> = ({
                         variant="contained"
                         color="primary"
                         disabled={maxRoomsReached}
-                        onClick={() => addRoom(createNewRoom('New Room'))}
+                        onClick={addRoom}
                     >
                         Add Room
                     </Button>

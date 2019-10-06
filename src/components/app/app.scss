@@ -5,14 +5,18 @@
 }
 
 .app-main {
-    background: linear-gradient(60deg, $gray-background, $light-gray-background);
+    background: linear-gradient(
+        60deg,
+        $gray-background,
+        $light-gray-background
+    );
     min-height: 100vh;
 }
 
 .app-container {
     background-color: $white;
     min-height: 100vh;
-    padding-top: 100px;
+    padding-top: 80px;
     padding-bottom: 100px;
 }
 
@@ -24,4 +28,8 @@
     background-color: rgba($color: $black, $alpha: 0.4);
     min-height: 20vh;
     color: $light-gray-background;
+}
+
+.MuiButton-root.example-button {
+    margin-bottom: 15px;
 }
