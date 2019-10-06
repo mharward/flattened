@@ -98,7 +98,7 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                     </Box>
                     <Box>
                         <FormControl error={heightError}>
-                            <InputLabel>Height (m)</InputLabel>
+                            <InputLabel>Depth (m)</InputLabel>
                             <Input
                                 type="number"
                                 value={room.height}

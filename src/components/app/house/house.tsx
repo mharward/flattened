@@ -59,6 +59,7 @@ const House: React.FC<HouseProps> = ({
                         This section represents a view of your flat. Add new
                         rooms to represent spaces within your flat. Edit them to
                         change their area and to specify who uses the room.
+                        Rooms are scaled by their dimensions.
                     </Help>
                 </Grid>
             </Grid>
