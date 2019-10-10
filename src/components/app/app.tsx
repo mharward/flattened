@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { cloneDeep } from 'lodash';
 import {
     AppBar,
@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import ReactGA from 'react-ga';
 import { RoomProps, FlatmateProps } from '../../common/entities';
-import { stringToHslColor } from '../../common/utilities';
+import { stringToHslColor, usePersistentState } from '../../common/utilities';
 import './app.scss';
 import House from './house';
 import Rent from './rent';
@@ -133,11 +133,14 @@ const manyBedroomsRooms = [
 ];
 
 const App: React.FC = () => {
-    const [amount, setAmount] = useState('220');
-    const [flatmates, setFlatmates] = useState<FlatmateProps[]>(
+    const [amount, setAmount] = usePersistentState('amount', '220');
+
+    const [flatmates, setFlatmates] = usePersistentState(
+        'flatmates',
         defaultFlatmates
     );
-    const [rooms, setRooms] = useState<RoomProps[]>(defaultRooms);
+
+    const [rooms, setRooms] = usePersistentState('rooms', defaultRooms);
 
     const updateFlatmateName = (flatmateId: string, newName: string): void => {
         const newFlatmates = cloneDeep(flatmates);
