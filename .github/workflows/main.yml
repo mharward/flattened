@@ -15,3 +15,5 @@ jobs:
       run: CI=true npm test
     - name: Runs npm build
       run: npm run build
+    - name: Request netlify deploy
+      run: curl -X POST -d {} ${{ secrets.NETLIFY_WEBHOOK }}
