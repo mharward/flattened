@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import ReactGA from 'react-ga';
 import { RoomProps, FlatmateProps } from '../../common/entities';
-import { stringToHslColor, usePersistentState } from '../../common/utilities';
+import { usePersistentState, getAvatarColor } from '../../common/utilities';
 import './app.scss';
 import House from './house';
 import Rent from './rent';
@@ -32,7 +32,7 @@ const createFlatmate = (name?: string): FlatmateProps => {
     return {
         id: 'flatmate' + newFlatmateId,
         name: name || defaultName,
-        color: stringToHslColor(defaultName, 70, 60),
+        color: getAvatarColor(),
     };
 };
 
