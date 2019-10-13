@@ -1,5 +1,5 @@
 
-const localStorageMock = (function() {
+export const localStorageMock = (function() {
     let store: any = {};
 
     return {
