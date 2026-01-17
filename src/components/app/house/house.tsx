@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@mui/material';
 import { FlatmateProps, RoomProps } from '../../../common/entities';
 
 import Room from './room';
@@ -67,7 +67,7 @@ const House: React.FC<HouseProps> = ({
                 item
                 container
                 direction="row"
-                justify="flex-start"
+                justifyContent="flex-start"
                 alignItems="flex-start"
                 spacing={2}
             >

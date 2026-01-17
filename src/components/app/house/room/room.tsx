@@ -8,10 +8,10 @@ import {
     IconButton,
     Tooltip,
     Typography,
-} from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
+} from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
 import { FlatmateProps, RoomProps } from '../../../../common/entities';
 import RoomEdit from './room-edit';
 import './room.scss';
@@ -33,11 +33,9 @@ const Room: React.FC<RoomCardProps> = ({
     remove,
     flatmates,
 }) => {
-    // TODO: allow drag and drop of rooms within house
-
     const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-    const openDialog = (event: any) => {
+    const openDialog = () => {
         setEditDialogOpen(true);
     };
 
@@ -50,6 +48,11 @@ const Room: React.FC<RoomCardProps> = ({
 
     const cardWidth = rawWidth > MAX_WIDTH ? MAX_WIDTH : rawWidth;
     const cardHeight = rawHeight > MAX_HEIGHT ? MAX_HEIGHT : rawHeight;
+
+    // Get occupant details from flatmates list
+    const occupants = flatmates.filter((f) =>
+        room.occupantIds.includes(f.id)
+    );
 
     return (
         <Card
@@ -105,16 +108,16 @@ const Room: React.FC<RoomCardProps> = ({
                 <Grid
                     container
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={1}
                 >
-                    {room.occupants.map((item, index) => (
-                        <Grid key={index} item>
-                            <Tooltip title={item.name}>
+                    {occupants.map((occupant) => (
+                        <Grid key={occupant.id} item>
+                            <Tooltip title={occupant.name}>
                                 <Avatar
                                     style={{
-                                        backgroundColor: item.color,
+                                        backgroundColor: occupant.color,
                                         width: '1.3em',
                                         height: '1.3em',
                                     }}

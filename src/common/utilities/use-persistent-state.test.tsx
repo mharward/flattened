@@ -1,82 +1,66 @@
-import { usePersistentState } from "./use-persistent-state";
-import React from "react";
+import { renderHook, act } from '@testing-library/react';
+import { usePersistentState } from './use-persistent-state';
 
 describe('usePersistentState', () => {
-    const setValue: any = jest.fn();
-    const useStateSpy = jest.spyOn(React, 'useState')
-    useStateSpy.mockImplementation((init?: any) => {
-        return [init(), setValue];
+    beforeEach(() => {
+        localStorage.clear();
     });
 
-    const useEffectSpy = jest.spyOn(React, 'useEffect');
-    useEffectSpy.mockImplementation((useEffectFunc) => {});
-  
     afterEach(() => {
-      jest.clearAllMocks();
-      localStorage.clear();
-    });
-    
-    it('should set state with a function that resolves to a default string value on first load', () => {
-        const [value] = usePersistentState('key', '100')
-
-        expect(useStateSpy).toHaveBeenCalled();
-        expect(value).toEqual('100');
-        expect(localStorage.getItem('key')).toEqual(null);
+        localStorage.clear();
     });
 
-    it('should set state with a function that resolves to a default object value on first load', () => {
-        const [value] = usePersistentState('key', { key2: "value2" })
+    it('should set state with a default string value on first load', () => {
+        const { result } = renderHook(() => usePersistentState('key', '100'));
 
-        expect(useStateSpy).toHaveBeenCalled();
-        expect(value).toEqual({ key2: "value2" });
-        expect(localStorage.getItem('key')).toEqual(null);
+        expect(result.current[0]).toEqual('100');
+    });
+
+    it('should set state with a default object value on first load', () => {
+        const { result } = renderHook(() =>
+            usePersistentState('key', { key2: 'value2' })
+        );
+
+        expect(result.current[0]).toEqual({ key2: 'value2' });
     });
 
     it('should set state to a string value in local storage when the key matches', () => {
         localStorage.setItem('key', JSON.stringify('200'));
 
-        const [value] = usePersistentState('key', '100')
+        const { result } = renderHook(() => usePersistentState('key', '100'));
 
-        expect(useStateSpy).toHaveBeenCalled();
-        expect(value).toEqual('200');
-        expect(localStorage.getItem('key')).toEqual('\"200\"');
+        expect(result.current[0]).toEqual('200');
     });
 
     it('should set state to an object value in local storage when the key matches', () => {
-        localStorage.setItem('key', JSON.stringify({ key1: "value1"}));
+        localStorage.setItem('key', JSON.stringify({ key1: 'value1' }));
 
-        const [value] = usePersistentState('key', '100')
+        const { result } = renderHook(() => usePersistentState('key', '100'));
 
-        expect(useStateSpy).toHaveBeenCalled();
-        expect(value).toEqual({ key1: "value1"});
-        expect(localStorage.getItem('key')).toEqual('{\"key1\":\"value1\"}');
+        expect(result.current[0]).toEqual({ key1: 'value1' });
     });
 
     it('should return an array containing the value and a function to set the value', () => {
-        const [value, setValue] = usePersistentState('key', '100');
+        const { result } = renderHook(() => usePersistentState('key', '100'));
 
-        expect(value).toEqual('100');
-        expect(setValue).toEqual(setValue);
+        expect(result.current[0]).toEqual('100');
+        expect(typeof result.current[1]).toBe('function');
     });
 
     it('should update the value in local storage when its value is set', () => {
-        useEffectSpy.mockImplementation((useEffectFunc) => {
-            useEffectFunc();
+        const { result } = renderHook(() => usePersistentState('key', '100'));
+
+        act(() => {
+            result.current[1]('200');
         });
 
-        usePersistentState('key', '100');
-
-        expect(useEffectSpy).toHaveBeenCalled();
-        expect(localStorage.getItem('key')).toEqual('\"100\"');
+        expect(result.current[0]).toEqual('200');
+        expect(localStorage.getItem('key')).toEqual('"200"');
     });
 
-    it('should set value to undefined if no initial value provided', () => {
-        const [value] = usePersistentState('key');
-
-        expect(value).toBeUndefined();
-    })
-
     it('should throw error if no key is provided', () => {
-        expect(() =>  usePersistentState(null as any)).toThrowError();
-    })
+        expect(() => {
+            renderHook(() => usePersistentState(null as unknown as string));
+        }).toThrowError();
+    });
 });

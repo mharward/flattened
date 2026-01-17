@@ -1,38 +1,39 @@
 # flattened
 
-The source project for [https://costmyflat.com](https://costmyflat.com). This repository provides a React SPA that is a calculator for spliting the rent for flatmates.
+The source project for [https://costmyflat.com](https://costmyflat.com). A React SPA calculator for splitting rent equitably between flatmates based on room sizes and occupancy.
+
+## Tech Stack
+
+- React 18
+- TypeScript 5
+- Vite
+- MUI v5 (Material-UI)
+- Vitest + React Testing Library
 
 ## Available Scripts
 
-In the project directory, you can run:
+### `npm run dev`
 
-### `npm start`
+Runs the app in development mode at [http://localhost:3000](http://localhost:3000).
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The page will hot-reload when you make edits.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### `npm run test`
 
-### `npm test`
+Launches Vitest in interactive watch mode.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `npm run test:ci`
+
+Runs tests once (for CI environments).
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `build` folder.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### `npm run preview`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Preview the production build locally.
 
-## React
+### `npm run prettier`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Format code with Prettier.

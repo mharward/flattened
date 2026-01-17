@@ -1,19 +1,24 @@
+import '@testing-library/jest-dom/vitest';
 
-export const localStorageMock = (function() {
-    let store: any = {};
+export const localStorageMock = (function () {
+    let store: Record<string, string> = {};
 
     return {
         getItem: (key: string) => {
             return store[key] || null;
         },
-        setItem: (key: string, value: any) => {
+        setItem: (key: string, value: string) => {
             store[key] = value.toString();
         },
         clear: () => {
             store = {};
-        }
+        },
+        removeItem: (key: string) => {
+            delete store[key];
+        },
     };
-
 })();
 
-(global as any).localStorage = localStorageMock;
+Object.defineProperty(window, 'localStorage', {
+    value: localStorageMock,
+});

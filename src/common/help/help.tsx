@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IconButton, Paper, Popover } from '@material-ui/core';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import { IconButton, Paper, Popover } from '@mui/material';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 interface HelpProps {
     children?: React.ReactNode;

@@ -1,10 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from '@testing-library/react';
 import House from './';
 
 it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(
+    render(
         <House
             area={10}
             rooms={[]}
@@ -12,8 +10,6 @@ it('renders without crashing', () => {
             updateRoom={() => {}}
             removeRoom={() => {}}
             flatmates={[]}
-        />,
-        div
+        />
     );
-    ReactDOM.unmountComponentAtNode(div);
 });

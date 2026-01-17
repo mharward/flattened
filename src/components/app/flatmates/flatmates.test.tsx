@@ -1,10 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from '@testing-library/react';
 import Flatmates from '.';
 
 it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(
+    render(
         <Flatmates
             amount={220.0}
             area={10}
@@ -13,8 +11,6 @@ it('renders without crashing', () => {
             addFlatmate={() => {}}
             removeFlatmate={() => {}}
             updateFlatmateName={() => {}}
-        />,
-        div
+        />
     );
-    ReactDOM.unmountComponentAtNode(div);
 });

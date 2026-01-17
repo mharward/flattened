@@ -3,7 +3,7 @@ export interface RoomProps {
     name: string;
     width: number;
     height: number;
-    occupants: FlatmateProps[];
+    occupantIds: string[];
 }
 
 export interface FlatmateProps {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid, List, Typography } from '@material-ui/core';
+import { Button, Grid, List, Typography } from '@mui/material';
 import { FlatmateProps, RoomProps } from '../../../common/entities';
 import Help from '../../../common/help';
 import Flatmate from './flatmate';

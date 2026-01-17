@@ -1,23 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from '@testing-library/react';
 import Room from '.';
 
 it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(
+    render(
         <Room
             room={{
                 id: 'room1',
                 name: 'My Room',
                 width: 1,
                 height: 2,
-                occupants: [],
+                occupantIds: [],
             }}
             updateRoom={() => {}}
             remove={() => {}}
             flatmates={[]}
-        />,
-        div
+        />
     );
-    ReactDOM.unmountComponentAtNode(div);
 });

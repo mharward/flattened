@@ -1,5 +1,4 @@
 import React from 'react';
-import { cloneDeep } from 'lodash';
 import {
     AppBar,
     Box,
@@ -9,8 +8,7 @@ import {
     Grid,
     Toolbar,
     Typography,
-} from '@material-ui/core';
-import ReactGA from 'react-ga';
+} from '@mui/material';
 import { RoomProps, FlatmateProps } from '../../common/entities';
 import { usePersistentState, getAvatarColor } from '../../common/utilities';
 import './app.scss';
@@ -19,14 +17,20 @@ import Rent from './rent';
 import Flatmates from './flatmates';
 import HeartHouse from './heart-house';
 
-ReactGA.initialize('UA-149483044-1');
-ReactGA.pageview('/');
+const getNextId = (items: { id: string }[], prefix: string): number => {
+    if (items.length === 0) return 1;
+    const maxId = items.reduce((max, item) => {
+        const num = parseInt(item.id.replace(prefix, ''), 10);
+        return isNaN(num) ? max : Math.max(num, max);
+    }, 0);
+    return maxId + 1;
+};
 
-let roomId = 1;
-let flatmateId = 1;
-
-const createFlatmate = (name?: string): FlatmateProps => {
-    const newFlatmateId = flatmateId++;
+const createFlatmate = (
+    existingFlatmates: FlatmateProps[],
+    name?: string
+): FlatmateProps => {
+    const newFlatmateId = getNextId(existingFlatmates, 'flatmate');
     const defaultName = 'Flatmate ' + newFlatmateId;
 
     return {
@@ -37,223 +41,226 @@ const createFlatmate = (name?: string): FlatmateProps => {
 };
 
 const createNewRoom = (
+    existingRooms: RoomProps[],
     name?: string,
     width?: number,
     height?: number,
-    flatmates?: FlatmateProps[]
+    occupantIds?: string[]
 ): RoomProps => {
-    const newRoomId = roomId++;
+    const newRoomId = getNextId(existingRooms, 'room');
     return {
         id: 'room' + newRoomId,
         name: name || 'Room ' + newRoomId,
-        occupants: flatmates || [],
+        occupantIds: occupantIds || [],
         width: width || 3,
         height: height || 3,
     };
 };
 
-const defaultFlatmates = [
-    createFlatmate('Jane Flatter'),
-    createFlatmate('Phil Renter'),
-];
+// Build example data with proper IDs
+const buildDefaultFlatmates = (): FlatmateProps[] => {
+    const flatmates: FlatmateProps[] = [];
+    flatmates.push(createFlatmate(flatmates, 'Jane Flatter'));
+    flatmates.push(createFlatmate(flatmates, 'Phil Renter'));
+    return flatmates;
+};
 
-const defaultRooms = [
-    createNewRoom('Bedroom', 3, 4, defaultFlatmates),
-    createNewRoom('Living Area', 4, 4, defaultFlatmates),
-    createNewRoom('Bathroom', 3, 2, defaultFlatmates),
-];
+const buildDefaultRooms = (flatmates: FlatmateProps[]): RoomProps[] => {
+    const allIds = flatmates.map((f) => f.id);
+    const rooms: RoomProps[] = [];
+    rooms.push(createNewRoom(rooms, 'Bedroom', 3, 4, allIds));
+    rooms.push(createNewRoom(rooms, 'Living Area', 4, 4, allIds));
+    rooms.push(createNewRoom(rooms, 'Bathroom', 3, 2, allIds));
+    return rooms;
+};
 
-const twoBedroomsRooms = [
-    createNewRoom('Master Bedroom', 5, 4, [defaultFlatmates[0]]),
-    createNewRoom('Small Bedroom', 3, 3, [defaultFlatmates[1]]),
-    createNewRoom('Living Area', 4, 4, defaultFlatmates),
-    createNewRoom('Kitchen', 3, 4, defaultFlatmates),
-    createNewRoom('Bathroom', 3, 2, defaultFlatmates),
-];
+const buildTwoBedroomsRooms = (flatmates: FlatmateProps[]): RoomProps[] => {
+    const allIds = flatmates.map((f) => f.id);
+    const rooms: RoomProps[] = [];
+    rooms.push(createNewRoom(rooms, 'Master Bedroom', 5, 4, [flatmates[0].id]));
+    rooms.push(createNewRoom(rooms, 'Small Bedroom', 3, 3, [flatmates[1].id]));
+    rooms.push(createNewRoom(rooms, 'Living Area', 4, 4, allIds));
+    rooms.push(createNewRoom(rooms, 'Kitchen', 3, 4, allIds));
+    rooms.push(createNewRoom(rooms, 'Bathroom', 3, 2, allIds));
+    return rooms;
+};
 
-const threeBedroomsFlatmates = [
-    ...defaultFlatmates,
-    createFlatmate('Eliza Housemate'),
-    createFlatmate('John Tenant'),
-];
+const buildThreeBedroomsData = (): {
+    flatmates: FlatmateProps[];
+    rooms: RoomProps[];
+} => {
+    const flatmates: FlatmateProps[] = [];
+    flatmates.push(createFlatmate(flatmates, 'Jane Flatter'));
+    flatmates.push(createFlatmate(flatmates, 'Phil Renter'));
+    flatmates.push(createFlatmate(flatmates, 'Eliza Housemate'));
+    flatmates.push(createFlatmate(flatmates, 'John Tenant'));
 
-const threeBedroomsRooms = [
-    createNewRoom('Master Bedroom', 5, 4, [
-        threeBedroomsFlatmates[0],
-        threeBedroomsFlatmates[1],
-    ]),
-    createNewRoom('Ensuite', 3, 2, [
-        threeBedroomsFlatmates[0],
-        threeBedroomsFlatmates[1],
-    ]),
-    createNewRoom('Bedroom', 4, 4, [threeBedroomsFlatmates[2]]),
-    createNewRoom('Small Bedroom', 3, 3, [threeBedroomsFlatmates[3]]),
-    createNewRoom('Living Area', 5, 4, threeBedroomsFlatmates),
-    createNewRoom('Kitchen', 3, 4, threeBedroomsFlatmates),
-    createNewRoom('Bathroom', 3, 2, threeBedroomsFlatmates),
-];
+    const allIds = flatmates.map((f) => f.id);
+    const rooms: RoomProps[] = [];
+    rooms.push(
+        createNewRoom(rooms, 'Master Bedroom', 5, 4, [
+            flatmates[0].id,
+            flatmates[1].id,
+        ])
+    );
+    rooms.push(
+        createNewRoom(rooms, 'Ensuite', 3, 2, [
+            flatmates[0].id,
+            flatmates[1].id,
+        ])
+    );
+    rooms.push(createNewRoom(rooms, 'Bedroom', 4, 4, [flatmates[2].id]));
+    rooms.push(createNewRoom(rooms, 'Small Bedroom', 3, 3, [flatmates[3].id]));
+    rooms.push(createNewRoom(rooms, 'Living Area', 5, 4, allIds));
+    rooms.push(createNewRoom(rooms, 'Kitchen', 3, 4, allIds));
+    rooms.push(createNewRoom(rooms, 'Bathroom', 3, 2, allIds));
 
-const manyBedroomsFlatmates = [
-    ...threeBedroomsFlatmates,
-    createFlatmate('Rachel Roommate'),
-    createFlatmate('Paul Tenant'),
-];
+    return { flatmates, rooms };
+};
 
-const manyBedroomsRooms = [
-    createNewRoom('Master Bedroom', 5, 4, [
-        manyBedroomsFlatmates[0],
-        manyBedroomsFlatmates[1],
-    ]),
-    createNewRoom('Master Ensuite', 3, 2, [
-        manyBedroomsFlatmates[0],
-        manyBedroomsFlatmates[1],
-    ]),
-    createNewRoom('Bedroom', 4, 4, [manyBedroomsFlatmates[2]]),
-    createNewRoom('Small Bedroom', 3, 3, [manyBedroomsFlatmates[4]]),
-    createNewRoom('Living Area', 5, 5, manyBedroomsFlatmates),
-    createNewRoom('Kitchen', 4, 4, manyBedroomsFlatmates),
-    createNewRoom('Bathroom', 3, 2, [
-        manyBedroomsFlatmates[0],
-        manyBedroomsFlatmates[1],
-        manyBedroomsFlatmates[2],
-        manyBedroomsFlatmates[4],
-    ]),
-    createNewRoom('Sleepout Bedroom', 3, 3, [
-        manyBedroomsFlatmates[3],
-        manyBedroomsFlatmates[5],
-    ]),
-    createNewRoom('Sleepout Bathroom', 3, 2, [
-        manyBedroomsFlatmates[3],
-        manyBedroomsFlatmates[5],
-    ]),
-    createNewRoom('Sleepout Living', 3, 3, [
-        manyBedroomsFlatmates[3],
-        manyBedroomsFlatmates[5],
-    ]),
-];
+const buildManyBedroomsData = (): {
+    flatmates: FlatmateProps[];
+    rooms: RoomProps[];
+} => {
+    const flatmates: FlatmateProps[] = [];
+    flatmates.push(createFlatmate(flatmates, 'Jane Flatter'));
+    flatmates.push(createFlatmate(flatmates, 'Phil Renter'));
+    flatmates.push(createFlatmate(flatmates, 'Eliza Housemate'));
+    flatmates.push(createFlatmate(flatmates, 'John Tenant'));
+    flatmates.push(createFlatmate(flatmates, 'Rachel Roommate'));
+    flatmates.push(createFlatmate(flatmates, 'Paul Tenant'));
+
+    const allIds = flatmates.map((f) => f.id);
+    const rooms: RoomProps[] = [];
+    rooms.push(
+        createNewRoom(rooms, 'Master Bedroom', 5, 4, [
+            flatmates[0].id,
+            flatmates[1].id,
+        ])
+    );
+    rooms.push(
+        createNewRoom(rooms, 'Master Ensuite', 3, 2, [
+            flatmates[0].id,
+            flatmates[1].id,
+        ])
+    );
+    rooms.push(createNewRoom(rooms, 'Bedroom', 4, 4, [flatmates[2].id]));
+    rooms.push(createNewRoom(rooms, 'Small Bedroom', 3, 3, [flatmates[4].id]));
+    rooms.push(createNewRoom(rooms, 'Living Area', 5, 5, allIds));
+    rooms.push(createNewRoom(rooms, 'Kitchen', 4, 4, allIds));
+    rooms.push(
+        createNewRoom(rooms, 'Bathroom', 3, 2, [
+            flatmates[0].id,
+            flatmates[1].id,
+            flatmates[2].id,
+            flatmates[4].id,
+        ])
+    );
+    rooms.push(
+        createNewRoom(rooms, 'Sleepout Bedroom', 3, 3, [
+            flatmates[3].id,
+            flatmates[5].id,
+        ])
+    );
+    rooms.push(
+        createNewRoom(rooms, 'Sleepout Bathroom', 3, 2, [
+            flatmates[3].id,
+            flatmates[5].id,
+        ])
+    );
+    rooms.push(
+        createNewRoom(rooms, 'Sleepout Living', 3, 3, [
+            flatmates[3].id,
+            flatmates[5].id,
+        ])
+    );
+
+    return { flatmates, rooms };
+};
+
+const initialFlatmates = buildDefaultFlatmates();
+const initialRooms = buildDefaultRooms(initialFlatmates);
 
 const App: React.FC = () => {
     const [amount, setAmount] = usePersistentState('amount', '220');
 
     const [flatmates, setFlatmates] = usePersistentState(
         'flatmates',
-        defaultFlatmates
+        initialFlatmates
     );
 
-    const [rooms, setRooms] = usePersistentState('rooms', defaultRooms);
+    const [rooms, setRooms] = usePersistentState('rooms', initialRooms);
 
     const updateFlatmateName = (flatmateId: string, newName: string): void => {
-        const newFlatmates = cloneDeep(flatmates);
-        const flatmate = newFlatmates.find(
-            flatmate => flatmate.id === flatmateId
+        setFlatmates(
+            flatmates.map((f) =>
+                f.id === flatmateId ? { ...f, name: newName } : f
+            )
         );
-        if (flatmate) {
-            flatmate.name = newName;
-            setFlatmates(newFlatmates);
-        }
-
-        const newRooms = cloneDeep(rooms);
-        newRooms.forEach(room => {
-            const occupant = room.occupants.find(
-                occupant => occupant.id === flatmateId
-            );
-            if (occupant) {
-                occupant.name = newName;
-            }
-        });
-        setRooms(newRooms);
     };
 
     const removeFlatmate = (flatmateId: string) => {
-        const newFlatmates = cloneDeep(flatmates).filter(
-            flatmate => flatmate.id !== flatmateId
+        setFlatmates(flatmates.filter((f) => f.id !== flatmateId));
+        setRooms(
+            rooms.map((room) => ({
+                ...room,
+                occupantIds: room.occupantIds.filter((id) => id !== flatmateId),
+            }))
         );
-        setFlatmates(newFlatmates);
-
-        const newRooms = cloneDeep(rooms);
-        newRooms.forEach(
-            room =>
-                (room.occupants = room.occupants.filter(
-                    occupant => occupant.id !== flatmateId
-                ))
-        );
-        setRooms(newRooms);
     };
 
     const addFlatmate = (): void => {
-        const newFlatmate = createFlatmate();
-        addFlatmates([newFlatmate], false);
-    };
-
-    const addFlatmates = (
-        flatmatesToAdd: FlatmateProps[],
-        replaceAll?: boolean
-    ) => {
-        const newFlatmates = replaceAll
-            ? flatmatesToAdd
-            : cloneDeep(flatmates).concat(flatmatesToAdd);
+        const newFlatmate = createFlatmate(flatmates);
+        const newFlatmates = [...flatmates, newFlatmate];
         setFlatmates(newFlatmates);
 
-        const newRooms = cloneDeep(rooms);
-        newRooms.forEach(room => {
-            if (replaceAll) {
-                room.occupants = [];
-            }
-            // If room is already shared, e.g. contains all flatmates, then add flatmates to room
-            if (
-                room.occupants.length ===
-                newFlatmates.length - flatmatesToAdd.length
-            ) {
-                room.occupants = room.occupants.concat(flatmatesToAdd);
-            }
-        });
-        if (newRooms.length > 0) {
-            setRooms(newRooms);
-        }
+        // Add new flatmate to shared rooms (rooms that had all previous flatmates)
+        setRooms(
+            rooms.map((room) => {
+                if (room.occupantIds.length === flatmates.length) {
+                    return {
+                        ...room,
+                        occupantIds: [...room.occupantIds, newFlatmate.id],
+                    };
+                }
+                return room;
+            })
+        );
     };
 
     const addRoom = () => {
-        const newRoom = createNewRoom();
-        newRoom.occupants = cloneDeep(flatmates);
-        addRooms([newRoom], false);
+        const allFlatmateIds = flatmates.map((f) => f.id);
+        const newRoom = createNewRoom(rooms, undefined, undefined, undefined, allFlatmateIds);
+        setRooms([...rooms, newRoom]);
     };
 
-    const addRooms = (roomsToAdd: RoomProps[], replaceAll?: boolean) => {
-        const newRooms = replaceAll
-            ? roomsToAdd
-            : cloneDeep(rooms).concat(roomsToAdd);
-        setRooms(newRooms);
+    const updateRoom = (updatedRoom: RoomProps) => {
+        if (!updatedRoom) return;
+        setRooms(
+            rooms.map((room) =>
+                room.id === updatedRoom.id ? updatedRoom : room
+            )
+        );
     };
 
-    const updateRoom = (item: RoomProps) => {
-        if (!item) return;
-        const newRooms = cloneDeep(rooms);
-        const index = newRooms.findIndex(room => room.id === item.id);
-        newRooms[index] = item;
-        setRooms(newRooms);
-    };
-
-    const removeRoom = (item: RoomProps) => {
-        const newRooms = cloneDeep(rooms).filter(room => room.id !== item.id);
-        setRooms(newRooms);
+    const removeRoom = (roomToRemove: RoomProps) => {
+        setRooms(rooms.filter((room) => room.id !== roomToRemove.id));
     };
 
     const area: number = rooms
-        .map(room => room.height * room.width)
+        .map((room) => room.height * room.width)
         .reduce((total, value) => total + value, 0);
 
     const amountValue: number = parseFloat(amount) || 0;
 
     const updateAllState = (
-        amount: string,
-        flatmates: FlatmateProps[],
-        rooms: RoomProps[]
+        newAmount: string,
+        newFlatmates: FlatmateProps[],
+        newRooms: RoomProps[]
     ) => {
-        roomId = rooms.length + 1;
-        flatmateId = flatmates.length + 1;
-        setAmount(amount);
-        addFlatmates(flatmates, true);
-        addRooms(rooms, true);
+        setAmount(newAmount);
+        setFlatmates(newFlatmates);
+        setRooms(newRooms);
     };
 
     const clearAll = () => {
@@ -261,15 +268,25 @@ const App: React.FC = () => {
     };
 
     // Examples
+    const oneBedroom = () => {
+        const f = buildDefaultFlatmates();
+        updateAllState('220', f, buildDefaultRooms(f));
+    };
 
-    const oneBedroom = () =>
-        updateAllState('220', defaultFlatmates, defaultRooms);
-    const twoBedrooms = () =>
-        updateAllState('350', defaultFlatmates, twoBedroomsRooms);
-    const threeBedrooms = () =>
-        updateAllState('420', threeBedroomsFlatmates, threeBedroomsRooms);
-    const manyBedrooms = () =>
-        updateAllState('540', manyBedroomsFlatmates, manyBedroomsRooms);
+    const twoBedrooms = () => {
+        const f = buildDefaultFlatmates();
+        updateAllState('350', f, buildTwoBedroomsRooms(f));
+    };
+
+    const threeBedrooms = () => {
+        const data = buildThreeBedroomsData();
+        updateAllState('420', data.flatmates, data.rooms);
+    };
+
+    const manyBedrooms = () => {
+        const data = buildManyBedroomsData();
+        updateAllState('540', data.flatmates, data.rooms);
+    };
 
     return (
         <React.Fragment>

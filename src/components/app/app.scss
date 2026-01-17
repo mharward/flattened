@@ -1,33 +1,33 @@
-@import '../../styles/colors';
+@use '../../styles/colors';
 
 .app-header {
-    background: linear-gradient(60deg, $orange-highlight, $purple-highlight);
+    background: linear-gradient(60deg, colors.$orange-highlight, colors.$purple-highlight);
 }
 
 .app-main {
     background: linear-gradient(
         60deg,
-        $gray-background,
-        $light-gray-background
+        colors.$gray-background,
+        colors.$light-gray-background
     );
     min-height: 100vh;
 }
 
 .app-container {
-    background-color: $white;
+    background-color: colors.$white;
     min-height: 100vh;
     padding-top: 80px;
     padding-bottom: 100px;
 }
 
 .app-footer {
-    background: linear-gradient(60deg, $orange-highlight, $purple-highlight);
+    background: linear-gradient(60deg, colors.$orange-highlight, colors.$purple-highlight);
 }
 
 .app-footer-container {
-    background-color: rgba($color: $black, $alpha: 0.4);
+    background-color: rgba($color: colors.$black, $alpha: 0.4);
     min-height: 20vh;
-    color: $light-gray-background;
+    color: colors.$light-gray-background;
 }
 
 .MuiButton-root.example-button {

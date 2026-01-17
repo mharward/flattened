@@ -10,8 +10,7 @@ import {
     Input,
     InputLabel,
     List,
-} from '@material-ui/core';
-import { cloneDeep } from 'lodash';
+} from '@mui/material';
 import { FlatmateProps, RoomProps } from '../../../../../common/entities';
 import OccupantListItem from './occupant-list-item';
 
@@ -37,30 +36,26 @@ const RoomEdit: React.FC<RoomEditProps> = ({
     const nameError =
         room.name.length === 0 || room.name.length > MAX_NAME_LENGTH;
 
-    const nameChange = (event: any) => {
-        const newRoom = cloneDeep(room);
-        newRoom.name = event.target.value;
-        updateRoom(newRoom);
+    const nameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        updateRoom({ ...room, name: event.target.value });
     };
 
     const widthError = room.width < MIN_ROOM_SIZE || room.width > MAX_ROOM_SIZE;
 
-    const widthChange = (event: any) => {
-        const newRoom = cloneDeep(room);
-        newRoom.width = event.target.value;
-        updateRoom(newRoom);
+    const widthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(event.target.value);
+        updateRoom({ ...room, width: isNaN(value) ? 0 : value });
     };
 
     const heightError =
         room.height < MIN_ROOM_SIZE || room.height > MAX_ROOM_SIZE;
 
-    const heightChange = (event: any) => {
-        const newRoom = cloneDeep(room);
-        newRoom.height = event.target.value;
-        updateRoom(newRoom);
+    const heightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(event.target.value);
+        updateRoom({ ...room, height: isNaN(value) ? 0 : value });
     };
 
-    const noOccupants = room.occupants.length === 0 && flatmates.length > 0;
+    const noOccupants = room.occupantIds.length === 0 && flatmates.length > 0;
 
     const dialogHasError: boolean =
         nameError || widthError || heightError || noOccupants;
@@ -68,9 +63,12 @@ const RoomEdit: React.FC<RoomEditProps> = ({
     return (
         <Dialog
             open={editDialogOpen}
-            onClose={closeDialog}
-            disableBackdropClick={dialogHasError}
-            disableEscapeKeyDown={dialogHasError}
+            onClose={(_, reason) => {
+                if (dialogHasError && (reason === 'backdropClick' || reason === 'escapeKeyDown')) {
+                    return;
+                }
+                closeDialog();
+            }}
             fullWidth
         >
             <DialogTitle>Edit Room</DialogTitle>
@@ -83,7 +81,7 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                         onChange={nameChange}
                         fullWidth={true}
                         autoFocus
-                    ></Input>
+                    />
                 </FormControl>
                 <Box display="flex" marginBottom="20px" marginTop="20px">
                     <Box marginRight="20px">
@@ -93,7 +91,7 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                                 type="number"
                                 value={room.width}
                                 onChange={widthChange}
-                            ></Input>
+                            />
                         </FormControl>
                     </Box>
                     <Box>
@@ -103,7 +101,7 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                                 type="number"
                                 value={room.height}
                                 onChange={heightChange}
-                            ></Input>
+                            />
                         </FormControl>
                     </Box>
                 </Box>

@@ -5,15 +5,14 @@ import {
     ListItemAvatar,
     ListItemText,
     Switch,
-} from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import { cloneDeep } from 'lodash';
+} from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 import { FlatmateProps, RoomProps } from '../../../../../../common/entities';
 
 interface OccupantListItemProps {
     flatmate: FlatmateProps;
     room: RoomProps;
-    updateRoom(room: RoomProps): void;
+    updateRoom(updatedRoom: RoomProps): void;
 }
 
 const OccupantListItem: React.FC<OccupantListItemProps> = ({
@@ -21,25 +20,13 @@ const OccupantListItem: React.FC<OccupantListItemProps> = ({
     room,
     updateRoom,
 }) => {
-    const isOccupant = () => {
-        return !!room.occupants.find(occupant => occupant.id === flatmate.id);
-    };
+    const isOccupant = room.occupantIds.includes(flatmate.id);
 
-    const updateOccupant = (event: any) => {
-        const isOccupant = event.target.checked;
-        const newRoom = cloneDeep(room);
-        const existingOccupant = newRoom.occupants.find(
-            occupant => occupant.id === flatmate.id
-        );
-        if (isOccupant && !existingOccupant) {
-            newRoom.occupants.push(flatmate);
-            updateRoom(newRoom);
-        } else if (!isOccupant && existingOccupant) {
-            newRoom.occupants = newRoom.occupants.filter(
-                occupant => occupant.id !== flatmate.id
-            );
-            updateRoom(newRoom);
-        }
+    const toggleOccupancy = () => {
+        const newOccupantIds = isOccupant
+            ? room.occupantIds.filter((id) => id !== flatmate.id)
+            : [...room.occupantIds, flatmate.id];
+        updateRoom({ ...room, occupantIds: newOccupantIds });
     };
 
     return (
@@ -55,12 +42,12 @@ const OccupantListItem: React.FC<OccupantListItemProps> = ({
                     <PersonIcon fontSize="small" />
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={flatmate.name}></ListItemText>
+            <ListItemText primary={flatmate.name} />
             <Switch
                 color="primary"
-                checked={isOccupant()}
-                onChange={updateOccupant}
-            ></Switch>
+                checked={isOccupant}
+                onChange={toggleOccupancy}
+            />
         </ListItem>
     );
 };

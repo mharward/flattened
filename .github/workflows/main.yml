@@ -6,14 +6,19 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
     - name: Install dependencies
-      run: npm install
-    - name: Runs unit tests
-      run: CI=true npm test
-    - name: Runs npm build
+      run: npm ci
+    - name: Run unit tests
+      run: npm run test:ci
+    - name: Run build
       run: npm run build
     - name: Request netlify deploy
       run: curl -X POST -d {} ${{ secrets.NETLIFY_WEBHOOK }}

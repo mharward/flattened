@@ -5,7 +5,7 @@ import {
     Input,
     InputAdornment,
     Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
 interface RentProps {
     amount: string;

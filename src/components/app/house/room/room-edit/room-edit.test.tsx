@@ -1,24 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from '@testing-library/react';
 import RoomEdit from '.';
 
 it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(
+    render(
         <RoomEdit
             room={{
                 id: '',
                 name: '',
                 width: 1,
                 height: 1,
-                occupants: [],
+                occupantIds: [],
             }}
             updateRoom={() => {}}
             editDialogOpen={true}
             closeDialog={() => {}}
             flatmates={[]}
-        />,
-        div
+        />
     );
-    ReactDOM.unmountComponentAtNode(div);
 });

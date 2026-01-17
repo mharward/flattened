@@ -2,50 +2,39 @@
   "name": "flattened",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/icons": "^4.11.2",
-    "@types/jest": "24.0.18",
-    "@types/lodash": "^4.14.172",
-    "@types/material-ui": "^0.21.9",
-    "@types/node": "12.7.8",
-    "@types/react": "16.9.3",
-    "@types/react-dom": "16.9.1",
-    "@types/recompose": "^0.30.8",
-    "lodash": "^4.17.21",
-    "node-sass": "^4.14.1",
-    "react": "^16.14.0",
-    "react-dnd": "^9.5.1",
-    "react-dnd-html5-backend": "^9.5.1",
-    "react-dom": "^16.14.0",
-    "react-ga": "^2.7.0",
-    "react-scripts": "3.1.2",
-    "recompose": "^0.30.0",
-    "typescript": "3.6.3"
-  },
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ci": "vitest run",
     "prettier": "prettier --write \"src/**/*.{js,tsx,scss,ts}\""
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.21",
+    "@mui/material": "^5.15.21",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "prettier": "1.18.2"
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@types/lodash": "^4.17.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "jsdom": "^24.1.0",
+    "prettier": "^3.3.2",
+    "sass": "^1.77.6",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3",
+    "vitest": "^1.6.0"
   },
   "prettier": {
     "trailingComma": "es5",

@@ -10,10 +10,10 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     Typography,
-} from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
+} from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
 import { FlatmateProps, RoomProps } from '../../../../common/entities';
 
 interface FlatmateDetailsProps {
@@ -26,7 +26,7 @@ interface FlatmateDetailsProps {
     flatmateCount: number;
 }
 
-const MAX_NAME_LENGHTH = 30;
+const MAX_NAME_LENGTH = 30;
 
 const Flatmate: React.FC<FlatmateDetailsProps> = ({
     flatmate,
@@ -39,14 +39,14 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
 }) => {
     const flatmateArea = rooms
         .filter(
-            room =>
-                room.occupants.length === 0 ||
-                room.occupants.find(occupant => occupant.id === flatmate.id)
+            (room) =>
+                room.occupantIds.length === 0 ||
+                room.occupantIds.includes(flatmate.id)
         )
         .map(
-            room =>
+            (room) =>
                 (room.width * room.height) /
-                (room.occupants.length || flatmateCount)
+                (room.occupantIds.length || flatmateCount)
         )
         .reduce((total, roomAreaForOccupant) => total + roomAreaForOccupant, 0);
 
@@ -57,7 +57,7 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
         removeFlatmate(flatmate.id);
     };
 
-    const nameChanged = (event: any) => {
+    const nameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateFlatmateName(flatmate.id, event.target.value);
     };
 
@@ -71,10 +71,10 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
     };
 
     const isNameInvalid =
-        flatmate.name.length < 1 || flatmate.name.length > MAX_NAME_LENGHTH;
+        flatmate.name.length < 1 || flatmate.name.length > MAX_NAME_LENGTH;
 
-    const nameKeyDown = (event: any) => {
-        if (event.keyCode === 13 || event.keyCode === 27) {
+    const nameKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
             toggleEditMode();
         }
     };
@@ -89,26 +89,22 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
 
     const dedicatedArea = rooms
         .filter(
-            room =>
-                (flatmateCount === 1 && room.occupants.length === 0) ||
-                (room.occupants.length === 1 &&
-                    room.occupants.find(
-                        occupant => occupant.id === flatmate.id
-                    ))
+            (room) =>
+                (flatmateCount === 1 && room.occupantIds.length === 0) ||
+                (room.occupantIds.length === 1 &&
+                    room.occupantIds.includes(flatmate.id))
         )
-        .map(room => room.width * room.height)
+        .map((room) => room.width * room.height)
         .reduce((total, roomArea) => total + roomArea, 0);
 
     const sharedArea = rooms
         .filter(
-            room =>
-                (flatmateCount > 1 && room.occupants.length === 0) ||
-                (room.occupants.length > 1 &&
-                    room.occupants.find(
-                        occupant => occupant.id === flatmate.id
-                    ))
+            (room) =>
+                (flatmateCount > 1 && room.occupantIds.length === 0) ||
+                (room.occupantIds.length > 1 &&
+                    room.occupantIds.includes(flatmate.id))
         )
-        .map(room => room.width * room.height)
+        .map((room) => room.width * room.height)
         .reduce((total, roomArea) => total + roomArea, 0);
 
     const totalArea = dedicatedArea + sharedArea;
@@ -135,7 +131,7 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                                     onKeyDown={nameKeyDown}
                                     onBlur={nameBlur}
                                     autoFocus
-                                ></Input>
+                                />
                             </FormControl>
                         ) : (
                             <Typography variant="h5" noWrap>
