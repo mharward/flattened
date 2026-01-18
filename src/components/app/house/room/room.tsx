@@ -51,7 +51,7 @@ const Room: React.FC<RoomCardProps> = ({
 
     // Get occupant details from flatmates list
     const occupants = flatmates.filter((f) =>
-        room.occupantIds.includes(f.id)
+        room.occupantIds?.includes(f.id)
     );
 
     return (

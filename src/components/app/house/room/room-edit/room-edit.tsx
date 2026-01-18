@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -33,42 +33,59 @@ const RoomEdit: React.FC<RoomEditProps> = ({
     closeDialog,
     flatmates,
 }) => {
+    const [localRoom, setLocalRoom] = useState<RoomProps>(room);
+
+    // Reset local state when dialog opens
+    useEffect(() => {
+        if (editDialogOpen) {
+            setLocalRoom(room);
+        }
+    }, [editDialogOpen, room]);
+
     const nameError =
-        room.name.length === 0 || room.name.length > MAX_NAME_LENGTH;
+        localRoom.name.length === 0 || localRoom.name.length > MAX_NAME_LENGTH;
 
     const nameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateRoom({ ...room, name: event.target.value });
+        setLocalRoom({ ...localRoom, name: event.target.value });
     };
 
-    const widthError = room.width < MIN_ROOM_SIZE || room.width > MAX_ROOM_SIZE;
+    const widthError =
+        localRoom.width < MIN_ROOM_SIZE || localRoom.width > MAX_ROOM_SIZE;
 
     const widthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseFloat(event.target.value);
-        updateRoom({ ...room, width: isNaN(value) ? 0 : value });
+        setLocalRoom({ ...localRoom, width: isNaN(value) ? 0 : value });
     };
 
     const heightError =
-        room.height < MIN_ROOM_SIZE || room.height > MAX_ROOM_SIZE;
+        localRoom.height < MIN_ROOM_SIZE || localRoom.height > MAX_ROOM_SIZE;
 
     const heightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseFloat(event.target.value);
-        updateRoom({ ...room, height: isNaN(value) ? 0 : value });
+        setLocalRoom({ ...localRoom, height: isNaN(value) ? 0 : value });
     };
 
-    const noOccupants = room.occupantIds.length === 0 && flatmates.length > 0;
+    const noOccupants =
+        (localRoom.occupantIds?.length ?? 0) === 0 && flatmates.length > 0;
 
     const dialogHasError: boolean =
         nameError || widthError || heightError || noOccupants;
 
+    const handleSave = () => {
+        if (!dialogHasError) {
+            updateRoom(localRoom);
+            closeDialog();
+        }
+    };
+
+    const updateLocalRoom = (updatedRoom: RoomProps) => {
+        setLocalRoom(updatedRoom);
+    };
+
     return (
         <Dialog
             open={editDialogOpen}
-            onClose={(_, reason) => {
-                if (dialogHasError && (reason === 'backdropClick' || reason === 'escapeKeyDown')) {
-                    return;
-                }
-                closeDialog();
-            }}
+            onClose={() => closeDialog()}
             fullWidth
         >
             <DialogTitle>Edit Room</DialogTitle>
@@ -77,7 +94,7 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                     <InputLabel>Name</InputLabel>
                     <Input
                         required={true}
-                        value={room.name}
+                        value={localRoom.name}
                         onChange={nameChange}
                         fullWidth={true}
                         autoFocus
@@ -89,7 +106,7 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                             <InputLabel>Width (m)</InputLabel>
                             <Input
                                 type="number"
-                                value={room.width}
+                                value={localRoom.width}
                                 onChange={widthChange}
                             />
                         </FormControl>
@@ -99,7 +116,7 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                             <InputLabel>Depth (m)</InputLabel>
                             <Input
                                 type="number"
-                                value={room.height}
+                                value={localRoom.height}
                                 onChange={heightChange}
                             />
                         </FormControl>
@@ -108,24 +125,27 @@ const RoomEdit: React.FC<RoomEditProps> = ({
                 <FormControl error={noOccupants}>
                     <InputLabel shrink={true}>Room Occupants</InputLabel>
                     <List>
-                        {flatmates.map(flatmate => (
+                        {flatmates.map((flatmate) => (
                             <OccupantListItem
                                 key={flatmate.id}
                                 flatmate={flatmate}
-                                room={room}
-                                updateRoom={updateRoom}
+                                room={localRoom}
+                                updateRoom={updateLocalRoom}
                             />
                         ))}
                     </List>
                 </FormControl>
             </DialogContent>
             <DialogActions>
+                <Button color="inherit" onClick={closeDialog}>
+                    Cancel
+                </Button>
                 <Button
                     color="primary"
-                    onClick={closeDialog}
+                    onClick={handleSave}
                     disabled={dialogHasError}
                 >
-                    Close
+                    Save
                 </Button>
             </DialogActions>
         </Dialog>

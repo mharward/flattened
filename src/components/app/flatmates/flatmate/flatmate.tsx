@@ -15,6 +15,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import { FlatmateProps, RoomProps } from '../../../../common/entities';
+import { calculateRentForFlatmate } from '../../../../common/utilities';
 
 interface FlatmateDetailsProps {
     flatmate: FlatmateProps;
@@ -37,21 +38,13 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
     updateFlatmateName,
     flatmateCount,
 }) => {
-    const flatmateArea = rooms
-        .filter(
-            (room) =>
-                room.occupantIds.length === 0 ||
-                room.occupantIds.includes(flatmate.id)
-        )
-        .map(
-            (room) =>
-                (room.width * room.height) /
-                (room.occupantIds.length || flatmateCount)
-        )
-        .reduce((total, roomAreaForOccupant) => total + roomAreaForOccupant, 0);
-
-    const percentage = area > 0 ? flatmateArea / area : 1 / flatmateCount;
-    const value = amount * percentage;
+    const rentCalc = calculateRentForFlatmate(
+        flatmate,
+        rooms,
+        area,
+        amount,
+        flatmateCount
+    );
 
     const remove = () => {
         removeFlatmate(flatmate.id);
@@ -85,29 +78,7 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
         }
     };
 
-    const percentageOfRent = (percentage * 100).toFixed(1);
-
-    const dedicatedArea = rooms
-        .filter(
-            (room) =>
-                (flatmateCount === 1 && room.occupantIds.length === 0) ||
-                (room.occupantIds.length === 1 &&
-                    room.occupantIds.includes(flatmate.id))
-        )
-        .map((room) => room.width * room.height)
-        .reduce((total, roomArea) => total + roomArea, 0);
-
-    const sharedArea = rooms
-        .filter(
-            (room) =>
-                (flatmateCount > 1 && room.occupantIds.length === 0) ||
-                (room.occupantIds.length > 1 &&
-                    room.occupantIds.includes(flatmate.id))
-        )
-        .map((room) => room.width * room.height)
-        .reduce((total, roomArea) => total + roomArea, 0);
-
-    const totalArea = dedicatedArea + sharedArea;
+    const percentageOfRent = (rentCalc.percentage * 100).toFixed(1);
 
     return (
         <ListItem>
@@ -150,18 +121,18 @@ const Flatmate: React.FC<FlatmateDetailsProps> = ({
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         </Typography>
                         <Typography variant="h5">
-                            ${value.toFixed(2)}
+                            ${rentCalc.rentAmount.toFixed(2)}
                         </Typography>
                     </Box>
                 }
                 secondary={
                     <span>
                         {percentageOfRent}%&nbsp;&bull;
-                        Dedicated&nbsp;area:&nbsp;{dedicatedArea}&nbsp;m
+                        Dedicated&nbsp;area:&nbsp;{rentCalc.dedicatedArea}&nbsp;m
                         <sup>2</sup>
-                        &nbsp;&bull; Shared&nbsp;area:&nbsp;{sharedArea}
+                        &nbsp;&bull; Shared&nbsp;area:&nbsp;{rentCalc.sharedArea}
                         &nbsp;m<sup>2</sup>&nbsp;&bull; Total&nbsp;area:&nbsp;
-                        {totalArea}&nbsp;m<sup>2</sup>
+                        {rentCalc.totalArea}&nbsp;m<sup>2</sup>
                     </span>
                 }
             />

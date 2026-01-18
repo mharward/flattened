@@ -20,12 +20,13 @@ const OccupantListItem: React.FC<OccupantListItemProps> = ({
     room,
     updateRoom,
 }) => {
-    const isOccupant = room.occupantIds.includes(flatmate.id);
+    const occupantIds = room.occupantIds ?? [];
+    const isOccupant = occupantIds.includes(flatmate.id);
 
     const toggleOccupancy = () => {
         const newOccupantIds = isOccupant
-            ? room.occupantIds.filter((id) => id !== flatmate.id)
-            : [...room.occupantIds, flatmate.id];
+            ? occupantIds.filter((id) => id !== flatmate.id)
+            : [...occupantIds, flatmate.id];
         updateRoom({ ...room, occupantIds: newOccupantIds });
     };
 
